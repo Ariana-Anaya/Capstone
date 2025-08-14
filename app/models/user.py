@@ -13,6 +13,17 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(50), nullable=True)
+    last_name = db.Column(db.String(50), nullable=True)
+    avatar_url = db.Column(db.String(255),nullable=True)
+    bio = db.Column(db.Text, nullable=True)
+
+    mixes = db.relationship("Mix", back_populates="user")
+    reviews = db.relationship("Review", back_populates="user")
+    followers = db.relationship("Follow", foreign_keys='Follow.followed_id', back_populates="followed")
+    following = db.relationship("Follow", foreign_keys='Follow.follower_id', back_populates="follower")
+
+
 
     @property
     def password(self):
@@ -29,5 +40,10 @@ class User(db.Model, UserMixin):
         return {
             'id': self.id,
             'username': self.username,
-            'email': self.email
+            'email': self.email,
+            'firstName': self.first_name,
+            'lastName': self.last_name,
+            'avatarUrl': self.avatar_url,
+            'bio': self.bio
+
         }
