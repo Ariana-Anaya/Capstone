@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
     reviews = db.relationship("Review", back_populates="user")
     followers = db.relationship("Follow", foreign_keys='Follow.followed_id', back_populates="followed")
     following = db.relationship("Follow", foreign_keys='Follow.follower_id', back_populates="follower")
+    reactions = db.relationship("Reaction", back_populates="user", cascade="all, delete-orphan")
 
 
 
