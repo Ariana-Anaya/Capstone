@@ -3,4 +3,5 @@ from .user import User
 from .song import Song
 from .mix import Mix
 from .mix_song import MixSong
+from .review import Review
 from .db import environment, SCHEMA

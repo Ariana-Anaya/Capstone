@@ -21,6 +21,8 @@ class Song(db.Model):
 
 
     mix_songs = db.relationship("MixSong", back_populates="song")
+    reviews = db.relationship("Review", back_populates="song", cascade="all, delete-orphan")
+
 
     def to_dict(self):
         return {
