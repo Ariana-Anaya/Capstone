@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app.models import Review, Song, User, db
-from sqlalchemy.exc import IntegrityError
 
 
 
@@ -81,9 +80,6 @@ def create_review():
         db.session.add(review)
         db.session.commit()
         return jsonify(review.to_dict_with_song_details()), 201
-    except IntegrityError:
-        db.session.rollback()
-        return jsonify({"message": "User already has a review for this song"}), 400
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Internal server error"}), 500
