@@ -31,5 +31,21 @@ class Review(db.Model):
             'updatedAt': self.updated_at,
         }
 
-
+    def to_dict_with_song_details(self):
+        return{
+            'id': self.id,
+            'userId': self.user_id,
+            'songId': {
+                'id': self.song.id,
+                'title': self.song.title,
+                'artist': self.song.artist,
+                'album': self.song.album,
+                'type': self.song.type,
+                'imageUrl': self.song.image_url
+            },
+            'review': self.review,
+            'rating': self.rating,
+            'createdAt': self.created_at,
+            'updatedAt': self.updated_at,
+        }
 

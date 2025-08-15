@@ -35,4 +35,4 @@ class Song(db.Model):
             'type': self.type,
             'createdAt': self.created_at,
             'updatedAt': self.updated_at
-        }
+        }        
