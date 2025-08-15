@@ -1,7 +1,7 @@
 #mixroutes
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import Mix, MixSong, User, db
+from app.models import Mix, MixSong, Song, User, db
 
 
 mix_routes = Blueprint('mixes', __name__)
@@ -12,14 +12,12 @@ def get_all_mixes():
     """
     Get all mixes with optional query filters
     """
-    # Get query parameters
     page = request.args.get('page', 1, type=int)
     size = request.args.get('size', 20, type=int)
     username = request.args.get('username', type=str)
     title = request.args.get('title', type=str)
     
 
-    # Validate parameters
     if page < 1:
         return jsonify({
             "message": "Bad Request",
@@ -32,10 +30,9 @@ def get_all_mixes():
             "errors": {"size": "Size must be between 1 and 20"}
         }), 400
 
-    # Start with base query
+    
     query = Mix.query.join(User)
 
-    # Apply filters
     if title:
         query = query.filter(Mix.title.ilike(f'%{title}%'))
     
@@ -45,7 +42,7 @@ def get_all_mixes():
     mixes = query.all()
 
     return jsonify({
-        "Mix": [mix.to_dict_user_and_song() for mix in mixes],
+        "Mixes": [mix.to_dict_user_and_song() for mix in mixes],
         "page": page,
         "size": size
     })
@@ -83,7 +80,6 @@ def create_mix():
     """
     data = request.get_json()
     
-    # Validation
     errors = {}
     
     if not data.get('title'):
@@ -128,7 +124,6 @@ def edit_mix(mix_id):
     
     data = request.get_json()
 
-    # Validation
     errors = {}
     
     if not data.get('title'):
@@ -178,3 +173,91 @@ def delete_mix(mix_id):
         return jsonify({"message": "Internal server error"}), 500
 
 
+
+
+
+
+
+
+@mix_routes.route('/<int:mix_id>/songs', methods=['POST'])
+@login_required
+def add_song_to_mix(mix_id):
+    mix = Mix.query.get(mix_id)
+
+    if not mix:
+        return jsonify({"message": "Mix couldn't be found"}), 404
+    
+    if mix.user_id != current_user.id:
+        return jsonify({"message": "Forbidden"}), 403
+
+    data = request.get_json()
+    spotify_uri = data.get('spotifyUri')
+
+    if not spotify_uri:
+            return jsonify({"message": "SpotifyUri required"}), 404
+
+    song = Song.query.filter(Song.spotify_uri == spotify_uri).first()
+    if not song:
+        song = Song(
+            spotify_uri=spotify_uri,
+            title=data.get('title'),
+            artist=data.get('artist'),
+            album=data.get('album'),
+            type=data.get('type'),
+            image_url=data.get('imageUrl'),
+            preview=data.get('preview', False)
+        )
+        db.session.add(song)
+        db.session.commit()
+
+    existing_song = MixSong.query.filter(
+        MixSong.mix_id == mix.id,
+        MixSong.song_id == song.id
+    ).first()
+    
+    if existing_song:
+        return jsonify({"message": "This song is already in mix"}), 400
+
+    mix_song = MixSong(mix_id=mix.id, song_id=song.id)
+    
+    try:
+        db.session.add(mix_song)
+        db.session.commit()
+        db.session.refresh(mix)
+
+        return jsonify(mix.to_dict_user_and_song()), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "Internal server error"}), 500
+
+
+
+@mix_routes.route('/<int:mix_id>/songs/<int:song_id>', methods=['DELETE'])
+@login_required
+def remove_song_to_mix(mix_id,song_id):
+    mix = Mix.query.get(mix_id)
+    if not mix:
+        return jsonify({"message": "Mix couldn't be found"}), 404
+    
+    if mix.user_id != current_user.id:
+        return jsonify({"message": "Forbidden"}), 403
+
+    mix_song = MixSong.query.filter(
+        MixSong.mix_id==mix.id,
+        MixSong.song_id==song_id
+    ).first()
+    if not mix_song:
+        return jsonify({"message": "Song couldn't be found in mix"}), 404
+
+
+    try:
+        db.session.delete(mix_song)
+        db.session.commit()
+        db.session.refresh(mix)
+
+        return jsonify(mix.to_dict_user_and_song())
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "Internal server error"}), 500
+    
