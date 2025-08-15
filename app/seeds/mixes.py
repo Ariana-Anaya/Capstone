@@ -5,12 +5,14 @@ def seed_mixes():
     mix1 = Mix(
         user_id=3,
         title="Demo Mix",
-        description="Basic Songs for Basic Taste"
+        description="Basic Songs for Basic Taste",
+        cover_url=""
     )
     mix2 = Mix(
         user_id=1,
-        title="Songs for Katie",
-        description="Songs that make me think of you :)"
+        title="Songs for Connie",
+        description="Songs that make me think of you :)",
+        cover_url=""
     )
     mix3 = Mix(
         user_id=2,
