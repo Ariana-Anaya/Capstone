@@ -32,3 +32,28 @@ class Mix(db.Model):
             'createdAt': self.created_at,
             'updatedAt': self.updated_at
         }
+
+    def to_dict_user_and_song(self):
+        return {
+            'id': self.id,
+            'userId': {
+                'id': self.user.id,
+                'username': self.user.username
+            },
+            'title': self.title,
+            'description': self.description,
+            'coverUrl': self.cover_url,
+            'createdAt': self.created_at,
+            'updatedAt': self.updated_at,
+            'mixsongs': [
+                {
+                    'id': mix_song.song.id,
+                    'title': mix_song.song.title,
+                    'artist': mix_song.song.artist,
+                    'album': mix_song.song.album,
+                    'type': mix_song.song.type,
+                    "imageUrl": mix_song.song.image_url
+                }
+                for mix_song in self.mix_songs
+            ]
+        }
