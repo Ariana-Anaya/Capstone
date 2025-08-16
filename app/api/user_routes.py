@@ -97,8 +97,7 @@ def get_user_followers(user_id):
     if not user:
         return jsonify({"message": "User couldn't be found"}), 404
 
-    if user_id != current_user.id:
-        return jsonify({"message": "Forbidden"}), 403
+   
     
     followers = Follow.query.filter(Follow.followed_id == user_id).all()
 
@@ -117,8 +116,7 @@ def get_user_following(user_id):
     if not user:
         return jsonify({"message": "User couldn't be found"}), 404
 
-    if user_id != current_user.id:
-        return jsonify({"message": "Forbidden"}), 403
+    
     
     following = Follow.query.filter(Follow.follower_id == user_id).all()
 
