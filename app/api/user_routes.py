@@ -97,12 +97,12 @@ def get_user_followers(user_id):
     if not user:
         return jsonify({"message": "User couldn't be found"}), 404
 
-   
     
     followers = Follow.query.filter(Follow.followed_id == user_id).all()
 
     return jsonify({
-        "Followers": [follower.to_dict() for follower in followers]
+        "count": len(followers),
+        "followers": [f.follower.to_dict() for f in followers]
     })
 
 @user_routes.route('/<int:user_id>/following')
@@ -121,5 +121,7 @@ def get_user_following(user_id):
     following = Follow.query.filter(Follow.follower_id == user_id).all()
 
     return jsonify({
-        "Following": [followed.to_dict() for followed in following]
+        "count": len(following),
+
+        "following": [f.followed.to_dict() for f in following]
     })
