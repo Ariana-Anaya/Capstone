@@ -21,8 +21,8 @@ def get_current_user_reviews():
 
 @review_routes.route('/<int:review_id>')
 def get_review_details(review_id):
-   """
- Get review by id
+    """
+    Get review by id
     """
     review = Review.query.get(review_id)
     

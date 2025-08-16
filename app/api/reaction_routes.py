@@ -7,7 +7,7 @@ reaction_routes = Blueprint('reactions', __name__)
 @reaction_routes.route('/review/<int:review_id>', methods=["POST"])
 @login_required
 def add_reaction_to_review(review_id):
-        """
+    """
     add a reaction to review
     """
     data = request.get_json()
@@ -45,7 +45,7 @@ def add_reaction_to_review(review_id):
 @reaction_routes.route('/mix/<int:mix_id>', methods=["POST"])
 @login_required
 def add_reaction_to_mix(mix_id):
-        """
+    """
     add a reaction to mix
     """
     data = request.get_json()

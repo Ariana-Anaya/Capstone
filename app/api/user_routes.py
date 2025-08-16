@@ -27,7 +27,7 @@ def user(id):
 @user_routes.route('/<int:user_id>')
 def get_user_details(user_id):
     """
- Get user details
+    Get user details
     """
     user = User.query.get(user_id)
     

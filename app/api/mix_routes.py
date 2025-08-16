@@ -61,7 +61,7 @@ def get_current_user_mixes():
 
 @mix_routes.route('/<int:mix_id>')
 def get_mix_details(mix_id):
-   """
+    """
  Get mix by id
     """
     mix = Mix.query.get(mix_id)
