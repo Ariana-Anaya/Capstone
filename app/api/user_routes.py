@@ -24,6 +24,18 @@ def user(id):
     user = User.query.get(id)
     return user.to_dict()
 
+@user_routes.route('/<int:user_id>')
+def get_user_details(user_id):
+    """
+ Get user details
+    """
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({"message": "User couldn't be found"}), 404
+    
+    return jsonify(user.to_dict())
+
 @user_routes.route('/<int:user_id>/reviews')
 @login_required
 def get_user_reviews(user_id):
@@ -125,3 +137,5 @@ def get_user_following(user_id):
 
         "following": [f.followed.to_dict() for f in following]
     })
+
+
