@@ -49,6 +49,8 @@ def add_reaction_to_mix(mix_id):
     add a reaction to mix
     """
     data = request.get_json()
+    reaction_type = data.get('type')
+
     mix = Mix.query.get(mix_id)
     
     if not mix:
@@ -66,7 +68,7 @@ def add_reaction_to_mix(mix_id):
     reaction = Reaction(
         user_id=current_user.id,
         mix_id=mix_id,
-        type="like"
+        type=data.get('type')
     )
 
 

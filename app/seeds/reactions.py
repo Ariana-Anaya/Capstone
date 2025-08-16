@@ -10,7 +10,7 @@ def seed_reactions():
     reaction2 = Reaction(
             user_id=2,
             mix_id=2,
-            type="dislike"
+            type="like"
     )
     reaction3 = Reaction(
             user_id=3,
