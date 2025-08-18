@@ -1,10 +1,11 @@
 import os
-from flask import Flask, render_template, request, session, redirect
+import requests
+from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from .models import db, User
+from .models import db, User, Song
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.follow_routes import follow_routes
@@ -42,6 +43,50 @@ Migrate(app, db)
 
 # Application Security
 CORS(app)
+
+
+spotify_access_token = None
+   
+def get_spotify_access_token():
+    global spotify_access_token
+    if spotify_access_token:
+        return spotify_access_token
+    auth_url = 'https://accounts.spotify.com/api/token'
+    auth_response = requests.post(auth_url, {
+        'grant_type': 'client_credentials',
+        'client_id' : app.config.get('SPOTIFY_CLIENT_ID'),
+        'client_secret' : app.config.get('SPOTIFY_CLIENT_SECRET')
+    })
+
+    auth_response.raise_for_status()
+    spotify_access_token = auth_response.json()['access_token']
+    return spotify_access_token
+
+@app.route('/api/spotify/search')
+def spotify_search():
+    query = request.args.get('q')
+    if not query:
+        return jsonify({"error": "Query parameter required"}), 400
+        
+    access_token = get_spotify_access_token()
+    search_url = 'https://api.spotify.com/v1/search'
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+    params = {
+        'q': query,
+        'type': 'track,album,artist',
+        'limit': 6
+    }
+    search_response = requests.get(search_url, headers=headers, params=params)
+    search_response.raise_for_status()
+
+    results = search_response.json()
+    return jsonify(results)
+
+        
+        
+
 
 
 # Since we are deploying with Docker and Flask,
