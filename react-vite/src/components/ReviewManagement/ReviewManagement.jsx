@@ -64,7 +64,7 @@ function ReviewManagement() {
         <div className="no-reviews">
           <h3>You haven't written any reviews yet</h3>
           <p>Find a song/album to review and share your opinions.</p>
-          <button className="btn-primary" onClick={() => navigate('/businesses')}>
+          <button className="btn-primary" onClick={() => navigate('/review/new')}>
             Explore ...
           </button>
         </div>
