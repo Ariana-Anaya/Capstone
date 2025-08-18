@@ -8,6 +8,8 @@ function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -27,6 +29,8 @@ function SignupFormModal() {
       thunkSignup({
         email,
         username,
+        first_name: firstName,
+        last_name: lastName,
         password,
       })
     );
@@ -40,19 +44,30 @@ function SignupFormModal() {
 
   return (
     <>
-      <h1>Sign Up</h1>
+      <h1>Join SongScribe</h1>
       {errors.server && <p>{errors.server}</p>}
       <form onSubmit={handleSubmit}>
-        <label>
-          Email
+      <label>
+          First Name
           <input
             type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.firstName && <p>{errors.firstName}</p>}
+        <label>
+          Last Name
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </label>
+        {errors.lastName && <p>{errors.lastName}</p>}
+
         <label>
           Username
           <input
@@ -63,6 +78,17 @@ function SignupFormModal() {
           />
         </label>
         {errors.username && <p>{errors.username}</p>}
+        <label>
+          Email
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        {errors.email && <p>{errors.email}</p>}
+       
         <label>
           Password
           <input

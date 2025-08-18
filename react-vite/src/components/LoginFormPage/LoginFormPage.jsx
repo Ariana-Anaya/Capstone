@@ -31,35 +31,77 @@ function LoginFormPage() {
     }
   };
 
+  const handleDemoLogin = async (e) => {
+    e.preventDefault();
+    const serverResponse = await dispatch(
+      thunkLogin({
+        email: "demo@aa.io",
+        password: "password",
+      })
+    );
+
+    if (!serverResponse) {
+      navigate("/");
+    }
+  };
+
   return (
-    <>
-      <h1>Log In</h1>
-      {errors.length > 0 &&
-        errors.map((message) => <p key={message}>{message}</p>)}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.password && <p>{errors.password}</p>}
-        <button type="submit">Log In</button>
-      </form>
-    </>
+    <div className="login-page">
+      <div className="login-container">
+        <h1>Welcome Back</h1>
+        
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+            {errors.email && <p className="error">{errors.email}</p>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+            {errors.password && <p className="error">{errors.password}</p>}
+          </div>
+
+          {errors.length > 0 && (
+            <div className="form-group">
+              {errors.map((message, idx) => (
+                <p key={idx} className="error">{message}</p>
+              ))}
+            </div>
+          )}
+
+          <button type="submit" className="login-button">
+            Log In
+          </button>
+          
+          <button type="button" onClick={handleDemoLogin} className="demo-login">
+            Demo User Login
+          </button>
+        </form>
+
+        <div className="auth-links">
+          <p>
+            Don&apos;t have an account?{' '}
+            <a href="/signup">Sign up here</a>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
