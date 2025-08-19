@@ -12,7 +12,7 @@ import mixReducer from "./mixes";
 const rootReducer = combineReducers({
   session: sessionReducer,
   reviews: reviewsReducer,
-  mix: mixReducer
+  mixes: mixReducer
 });
 
 let enhancer;

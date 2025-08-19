@@ -30,22 +30,25 @@ class Mix(db.Model):
             'description': self.description,
             'coverUrl': self.cover_url,
             'createdAt': self.created_at,
-            'updatedAt': self.updated_at
+            'updatedAt': self.updated_at,
+            'numReactions': len(self.reactions) if self.reactions else 0
         }
 
     def to_dict_user_and_song(self):
+        reaction_counts = {}
+        for reaction in self.reactions:
+            reaction_counts[reaction.type] = reaction_counts.get(reaction.type, 0) + 1
+
         return {
             'id': self.id,
-            'userId': {
-                'id': self.user.id,
-                'username': self.user.username
-            },
-            'title': self.title,
+            'name': self.title,
             'description': self.description,
-            'coverUrl': self.cover_url,
+            'previewImage': self.cover_url,
+            'username': self.user.username,
+            'numReactions': reaction_counts,
             'createdAt': self.created_at,
             'updatedAt': self.updated_at,
-            'mixsongs': [
+             'mixsongs': [
                 {
                     'id': mix_song.song.id,
                     'title': mix_song.song.title,
@@ -57,3 +60,4 @@ class Mix(db.Model):
                 for mix_song in self.mix_songs
             ]
         }
+          

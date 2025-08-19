@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
-from app.models import User, Review, Mix, Reaction, Follow, db
+from app.models import User, Mix, Reaction, Follow, db
 
 user_routes = Blueprint('users', __name__)
 
@@ -35,47 +35,6 @@ def get_user_details(user_id):
         return jsonify({"message": "User couldn't be found"}), 404
     
     return jsonify(user.to_dict())
-
-@user_routes.route('/<int:user_id>/reviews')
-@login_required
-def get_user_reviews(user_id):
-    """
-    get all reviews by user
-    """
-    
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"message": "User couldn't be found"}), 404
-
-    if user_id != current_user.id:
-        return jsonify({"message": "Forbidden"}), 403
-    
-    reviews = Review.query.filter(Review.user_id == user_id).all()
-
-    return jsonify({
-        "Reviews": [review.to_dict_with_user_songs() for review in reviews]
-    })
-    
-@user_routes.route('/<int:user_id>/mixes')
-@login_required
-def get_user_mixes(user_id):
-    """
-    get all mixes by user
-    """
-    
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"message": "User couldn't be found"}), 404
-
-    if user_id != current_user.id:
-        return jsonify({"message": "Forbidden"}), 403
-    
-    mixes = Mix.query.filter(Mix.user_id == user_id).all()
-
-    return jsonify({
-        "Mixes": [mix.to_dict_with_user_songs() for mix in mixes]
-    })
-
 
 
 @user_routes.route('/<int:user_id>/reactions')

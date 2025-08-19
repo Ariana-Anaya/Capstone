@@ -29,9 +29,15 @@ class Review(db.Model):
             'rating': self.rating,
             'createdAt': self.created_at,
             'updatedAt': self.updated_at,
+            'numReactions': len(self.reactions) if self.reactions else 0
+
         }
 
     def to_dict_with_song_details(self):
+        reaction_counts = {}
+        for reaction in self.reactions:
+            reaction_counts[reaction.type] = reaction_counts.get(reaction.type, 0) + 1
+
         return{
             'id': self.id,
             'userId': self.user_id,
@@ -45,6 +51,7 @@ class Review(db.Model):
             },
             'review': self.review,
             'rating': self.rating,
+            'numReactions': reaction_counts,
             'createdAt': self.created_at,
             'updatedAt': self.updated_at,
         }

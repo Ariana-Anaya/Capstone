@@ -6,6 +6,7 @@ const UPDATE_REVIEW = 'reviews/UPDATE_REVIEW';
 const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
 const CLEAR_REVIEWS = 'reviews/CLEAR_REVIEWS';
 const LOAD_MY_REVIEWS = 'reviews/LOAD_MY_REVIEWS';
+const LOAD_RECENT_REVIEWS = 'reviews/LOAD_RECENT_REVIEWS';
 
 
 const loadSongReviews = (songId, reviews) => ({
@@ -46,6 +47,11 @@ const loadSongReviews = (songId, reviews) => ({
 
   const loadMyReviews = (reviews) => ({
     type: LOAD_MY_REVIEWS,
+    reviews
+  });
+
+  const loadRecentReviews = (reviews) => ({
+    type: LOAD_RECENT_REVIEWS,
     reviews
   });
   
@@ -134,7 +140,7 @@ const loadSongReviews = (songId, reviews) => ({
   };
   
   export const fetchMyReviews = () => async (dispatch) => {
-    const response = await fetch('/api/myreviews/current');
+    const response = await fetch('/api/reviews/myreviews');
     
     if (response.ok) {
       const data = await response.json();
@@ -144,6 +150,17 @@ const loadSongReviews = (songId, reviews) => ({
     }
   };
   
+export const fetchRecentReviews = () => async (dispatch) => {
+  const response = await fetch('/api/reviews/recent');
+
+  if (response.ok) {
+      const data = await response.json();
+      
+      dispatch(loadRecentReviews(data.Reviews));
+      return data;
+    }
+};  
+
   const initialState = {
     songReviews: {},
     userReviews: {},
@@ -259,11 +276,23 @@ const loadSongReviews = (songId, reviews) => ({
       case CLEAR_REVIEWS:
         return initialState;
         
+      
+
+      case LOAD_RECENT_REVIEWS:
+        const allReviews = {};
+      action.reviews.forEach(review => {
+        allReviews[review.id] = review;
+      });
+      return {
+        ...state,
+        allReviews
+      }
       default:
         return state;
     }
   }
   ;
+
 
   
   

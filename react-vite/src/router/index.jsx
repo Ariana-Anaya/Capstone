@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
 import ReviewManagement from '../components/ReviewManagement';
+import MixManagement from '../components/MixManagement';
 import ReviewForm from '../components/ReviewForm';
 
 import Layout from './Layout';
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/reviews/manage",
         element: <ReviewManagement />,
+      },
+      {
+        path: "/mixes/manage",
+        element: <MixManagement />,
       },
       {
         path: "login",

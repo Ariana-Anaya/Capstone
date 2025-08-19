@@ -5,6 +5,7 @@ const ADD_MIX = 'mixes/ADD_MIX';
 const UPDATE_MIX = 'mixes/UPDATE_MIX';
 const DELETE_MIX = 'mixes/DELETE_MIX';
 const CLEAR_MIX = 'mixes/CLEAR_MIX';
+const LOAD_RECENT_MIXES = 'mixes/LOAD_RECENT_MIXES';
 
 
 
@@ -43,6 +44,11 @@ const deleteMix = (mixId) => ({
   mixId
 });
 
+const loadRecentMixes = (mixes) => ({
+  type: LOAD_RECENT_MIXES,
+  mixes
+});
+
 export const clearMix = () => ({
   type: CLEAR_MIX,
 });
@@ -76,7 +82,7 @@ export const fetchMixDetails = (mixId) => async (dispatch) => {
 };
 
 export const fetchMyMixes = () => async (dispatch) => {
-  const response = await fetch('/api/mymixes');
+  const response = await fetch('/api/mixes/mymixes');
   
   if (response.ok) {
     const data = await response.json();
@@ -137,13 +143,23 @@ export const removeMix = (mixId) => async (dispatch) => {
   }
 };
 
+export const fetchRecentMixes = () => async (dispatch) => {
+  const response = await fetch('/api/mixes/recent');
 
+  if (response.ok) {
+      const data = await response.json();
+      
+      dispatch(loadRecentMixes(data.Mixes));
+      return data;
+    }
+}; 
 
 
 const initialState = {
   allMixes: {},
   singleMix: {},
   userMixes: {},
+  recentMixes: {},
   page: 1,
   size: 20
 };
@@ -246,7 +262,20 @@ const mixReducer = (state = initialState, action) => {
     
     case CLEAR_MIX:
       return initialState;
+    
       
+    
+
+    case LOAD_RECENT_MIXES:
+      const recentMixes = {};
+      action.mixes.forEach(mix => {
+      recentMixes[mix.id] = mix;
+      });
+      return {
+        ...state,
+        recentMixes
+    }
+
     default:
       return state;
   }

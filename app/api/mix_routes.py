@@ -72,7 +72,7 @@ def get_mix_details(mix_id):
     return jsonify(mix.to_dict_user_and_song())
 
 
-@mix_routes.route('/mixes', methods=['POST'])
+@mix_routes.route('/', methods=['POST'])
 @login_required
 def create_mix():
     """
@@ -96,12 +96,37 @@ def create_mix():
     mix = Mix(
         user_id=current_user.id,
         title=data['title'],
-        description=data['description'],
+        description=data.get('description',''),
+        cover_image=data.get('cover_image', None)
     )
     
     try:
         db.session.add(mix)
         db.session.commit()
+
+        if data.get('songs'):
+            for song_data in data['songs']:
+                song = Song.query.filter_by(spotify_uri=song_data['spotify_uri']).first()
+
+                if not song:
+                    song = Song(
+                         spotify_uri=song_data['spotify_uri'],
+                         title=song_data['title'],
+                         artist=song_data['artist'],
+                         album=song_data['album'],
+                         type=song_data['type'],
+                         image_url=song_data.get('image_url', None),
+                         preview_url=song_data.get('preview_url', None)
+                    )
+                    db.session.add(song)
+                    db.session.commit()
+                
+                mix_song = MixSong(mix_id=mix.id, song_id=song.id)
+                db.session.add(mix_song)
+
+            db.session.commit()
+            db.session.refresh(mix)
+            
         return jsonify(mix.to_dict_user_and_song()), 201
     except Exception as e:
         db.session.rollback()
@@ -139,7 +164,7 @@ def edit_mix(mix_id):
     # update mix
     
     mix.title = data['title']
-    mix.description = data['description']
+    mix.description = data.get('discription', mix.discription)
     
     
     try:
@@ -204,7 +229,7 @@ def add_song_to_mix(mix_id):
             artist=data.get('artist'),
             album=data.get('album'),
             type=data.get('type'),
-            image_url=data.get('imageUrl'),
+            image_url=data.get('image_url'),
             preview=data.get('preview', False)
         )
         db.session.add(song)
@@ -261,3 +286,11 @@ def remove_song_to_mix(mix_id,song_id):
         db.session.rollback()
         return jsonify({"message": "Internal server error"}), 500
     
+@mix_routes.route('/recent')
+def get_recent_mixes():
+    mixes = Mix.query.order_by(Mix.created_at.desc()).limit(10).all()
+
+    return jsonify({
+        "Mixes": [mix.to_dict_user_and_song() for mix in mixes]
+    })
+
