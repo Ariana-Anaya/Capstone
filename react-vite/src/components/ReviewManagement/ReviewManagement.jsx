@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchUserReviews, removeReview } from '../../redux/reviews';
+import { fetchReviews, removeReview } from '../../redux/reviews';
 import './ReviewManagement.css';
 
 function ReviewManagement() {
@@ -21,7 +21,7 @@ function ReviewManagement() {
 
     const loadReviews = async () => {
       try {
-        await dispatch(fetchUserReviews(user.id));
+        await dispatch(fetchReviews());
       } catch (error) {
         console.error('Error loading reviews:', error);
       } finally {
@@ -73,7 +73,7 @@ function ReviewManagement() {
           {reviews.map(review => (
             <div key={review.id} className="review-card">
               <div className="review-header">
-                <h3>{review.businessName}</h3>
+                <h3>{review.songName}</h3>
                 <span className="review-date">
                   {new Date(review.createdAt).toLocaleDateString()}
                 </span>
@@ -112,7 +112,7 @@ function ReviewManagement() {
             <h3>Delete Review</h3>
             <p>
               Are you sure you want to delete your review for 
-              "{deleteModal.businessName}"? This action cannot be undone.
+              "{deleteModal.songTitle}"? This action cannot be undone.
             </p>
             <div className="modal-actions">
               <button 

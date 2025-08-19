@@ -81,8 +81,8 @@ const loadSongReviews = (songId, reviews) => ({
     }
   };
   
-  export const createReview = (songId, reviewData) => async (dispatch) => {
-    const response = await fetch(`/api/song/${songId}/reviews`, {
+  export const createReview = (reviewData) => async (dispatch) => {
+    const response = await fetch(`/api/reviews`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

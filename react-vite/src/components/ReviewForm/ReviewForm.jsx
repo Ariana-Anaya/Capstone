@@ -13,7 +13,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedSong, setSelectedSong] = useState( review ? review.song: null);
   const [reviewText, setReviewText] = useState(review ? review.review : '');
-  const [stars, setStars] = useState(review ? review.stars : 0);
+  const [rating, setRating] = useState(review ? review.rating : 0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,15 +63,15 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
       setIsSubmitting(false);
       return;
     }
-
+  
     if (!reviewText.trim()) {
       setErrors({ review: 'Review text is required' });
       setIsSubmitting(false);
       return;
     }
 
-    if (stars < 1 || stars > 5) {
-      setErrors({ stars: 'Please select a star rating' });
+    if (rating < 1 || rating > 5) {
+      setErrors({ rating: 'Please select a rating' });
       setIsSubmitting(false);
       return;
     }
@@ -79,9 +79,13 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
 
 
     const reviewData = {
-      songId: selectedSong.id,
+      spotify_uri: selectedSong.uri,
+      title: selectedSong.name,
+      artist: selectedSong.artists[0]?.name,
+      album: selectedSong.album?.name,
+      image_url: selectedSong.album?.images[0]?.url,
       review: reviewText,
-      stars: stars
+      rating: rating
     };
 
     try {
@@ -89,7 +93,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
       if (isEdit && onSubmit) {
         result = await onSubmit(reviewData);
       } else {
-        result = await dispatch(createReview(selectedSong.id, reviewData));
+        result = await dispatch(createReview(reviewData));
       }
 
       if (result.errors) {
@@ -105,7 +109,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
   };
 
   const handleStarClick = (rating) => {
-    setStars(rating);
+    setRating(rating);
   };
 
   const handleStarHover = (rating) => {
@@ -135,7 +139,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
                   onChange={handleSearchChange}
                   placeholder='Search Song/Album'
                 />
-                  
+                       
              
 
           {searchResults.length > 0 && (
@@ -163,21 +167,21 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
 
 
           <div className="form-group">
-            <label>Score</label>
+            <label>Rating</label>
             <div className="star-rating">
-              {[1, 2, 3, 4, 5].map((rating) => (
+              {[1, 2, 3, 4, 5].map((value) => (
                 <span
-                  key={rating}
-                  className={`star ${rating <= (hoveredStar || stars) ? 'active' : ''}`}
-                  onClick={() => handleStarClick(rating)}
-                  onMouseEnter={() => handleStarHover(rating)}
+                  key={value}
+                  className={`star ${value <= (hoveredStar || rating) ? 'active' : ''}`}
+                  onClick={() => handleStarClick(value)}
+                  onMouseEnter={() => handleStarHover(value)}
                   onMouseLeave={handleStarLeave}
                 >
                   ★
                 </span>
               ))}
             </div>
-            {errors.stars && <p className="error">{errors.stars}</p>}
+            {errors.rating && <p className="error">{errors.rating}</p>}
           </div>
 
           <div className="form-group">

@@ -32,23 +32,44 @@ def get_review_details(review_id):
     return jsonify(review.to_dict_with_song_details())
 
 
-@review_routes.route('/reviews', methods=['POST'])
+@review_routes.route('', methods=['POST'])
 @login_required
 def create_review():
     """
     Create a review 
     """
     data = request.get_json()
-    song_id = data.get('song_id')
-    song = Song.query.get(song_id)
+
+    spotify_uri = data.get('spotify_uri')
+    title = data.get('title')
+    artist = data.get('artist')
+    album = data.get('album')
+    image_url = data.get('image_url')
+
+    song = Song.query.filter_by(spotify_uri=spotify_uri).first()
+
     
     if not song:
-        return jsonify({"message": "Song couldn't be found"}), 404
+        if not all([spotify_uri, title, artist, album, image_url]):
+            return jsonify({"message": "Missing song information"}), 400
     
-    
+        song = Song(
+            spotify_uri=spotify_uri,
+            title=title,
+            artist=artist,
+            album=album,
+            type="track",
+            image_url=image_url
+        )
+        db.session.add(song)
+        
+        db.session.commit()
+       
+       
+          
     existing_review = Review.query.filter(
         Review.user_id == current_user.id,
-        Review.song_id == song_id
+        Review.song_id == song.id
     ).first()
     
     if existing_review:
@@ -60,8 +81,8 @@ def create_review():
     
     if not data.get('review'):
         errors['review'] = "Review text is required"
-    if not data.get('rating') or not isinstance(data.get('rating'), int) or data.get('rating') < 1 or data.get('rating') > 10:
-        errors['rating'] = "Rating must be an integer from 1 to 10"
+    if not data.get('rating') or not isinstance(data.get('rating'), int) or data.get('rating') < 1 or data.get('rating') > 5:
+        errors['rating'] = "Rating must be an integer from 1 to 5"
     
     if errors:
         return jsonify({
@@ -71,7 +92,7 @@ def create_review():
     
     review = Review(
         user_id=current_user.id,
-        song_id=song_id,
+        song_id=song.id,
         review=data['review'],
         rating=data['rating']
     )
@@ -106,8 +127,8 @@ def edit_review(review_id):
     
     if not data.get('review'):
         errors['review'] = "Review text is required"
-    if not data.get('rating') or not isinstance(data.get('rating'), int) or data.get('rating') < 1 or data.get('rating') > 10:
-        errors['rating'] = "Rating must be an integer from 1 to 10"
+    if not data.get('rating') or not isinstance(data.get('rating'), int) or data.get('rating') < 1 or data.get('rating') > 5:
+        errors['rating'] = "Rating must be an integer from 1 to 5"
     
     if errors:
         return jsonify({

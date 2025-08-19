@@ -1,5 +1,8 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import requests
+from requests.auth import HTTPBasicAuth
 from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -51,38 +54,54 @@ def get_spotify_access_token():
     global spotify_access_token
     if spotify_access_token:
         return spotify_access_token
-    auth_url = 'https://accounts.spotify.com/api/token'
-    auth_response = requests.post(auth_url, {
-        'grant_type': 'client_credentials',
-        'client_id' : app.config.get('SPOTIFY_CLIENT_ID'),
-        'client_secret' : app.config.get('SPOTIFY_CLIENT_SECRET')
-    })
 
-    auth_response.raise_for_status()
-    spotify_access_token = auth_response.json()['access_token']
+    client_id = app.config.get("SPOTIFY_CLIENT_ID")
+    client_secret = app.config.get("SPOTIFY_CLIENT_SECRET")
+    if not client_id or not client_secret:
+        raise Exception("Spotify client ID or secret not set in config")
+
+    url = "https://accounts.spotify.com/api/token"
+    data = {"grant_type": "client_credentials"}
+
+    response = requests.post(url, data=data, auth=HTTPBasicAuth(client_id, client_secret))
+    response.raise_for_status()
+    spotify_access_token = response.json()["access_token"]
     return spotify_access_token
 
 @app.route('/api/spotify/search')
 def spotify_search():
-    query = request.args.get('q')
-    if not query:
-        return jsonify({"error": "Query parameter required"}), 400
-        
-    access_token = get_spotify_access_token()
-    search_url = 'https://api.spotify.com/v1/search'
-    headers = {
-        'Authorization': f'Bearer {access_token}'
-    }
-    params = {
-        'q': query,
-        'type': 'track,album,artist',
-        'limit': 6
-    }
-    search_response = requests.get(search_url, headers=headers, params=params)
-    search_response.raise_for_status()
+    try:
+        query = request.args.get('q')
+        if not query:
+            return jsonify({"error": "Query parameter required"}), 400
 
-    results = search_response.json()
-    return jsonify(results)
+           
+        access_token = get_spotify_access_token()
+        if not access_token:
+            return jsonify({"error": "Failed to get Access Token"}), 500
+
+        search_url = 'https://api.spotify.com/v1/search'
+        headers = {
+            'Authorization': f'Bearer {access_token}'
+        }
+        params = {
+            'q': query,
+            'type': 'track,album,artist',
+            'limit': 6
+        }
+        search_response = requests.get(search_url, headers=headers, params=params)
+        search_response.raise_for_status()
+
+        results = search_response.json()
+        return jsonify(results)
+    except requests.exceptions.RequestException as e:
+        print("Spotify search error", e)
+
+        return jsonify({"error": "Spotify Search failed", "details": str(e)}), 500
+    except Exception as e:
+        print("Unexpected error", e)
+        return jsonify({"error": "unexpected error", "details": str(e)}), 500
+
 
         
         
@@ -143,3 +162,4 @@ def react_root(path):
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
+
