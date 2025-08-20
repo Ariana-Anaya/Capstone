@@ -6,6 +6,8 @@ const UPDATE_MIX = 'mixes/UPDATE_MIX';
 const DELETE_MIX = 'mixes/DELETE_MIX';
 const CLEAR_MIX = 'mixes/CLEAR_MIX';
 const LOAD_RECENT_MIXES = 'mixes/LOAD_RECENT_MIXES';
+const ADD_SONG_TO_MIX = 'mixes/ADD_SONG_TO_MIX';
+const REMOVE_SONG_FROM_MIX = 'mixes/REMOVE_SONG_FROM_MIX';
 
  
 
@@ -47,6 +49,18 @@ const deleteMix = (mixId) => ({
 const loadRecentMixes = (mixes) => ({
   type: LOAD_RECENT_MIXES,
   mixes
+});
+
+const addSongUpdate = (mixId, song) => ({
+  type: ADD_SONG_TO_MIX,
+  mixId,
+  song
+});
+
+const removeSongUpdate = (mixId, songId) => ({
+  type: REMOVE_SONG_FROM_MIX,
+  mixId,
+  songId
 });
 
 export const clearMix = () => ({
@@ -153,6 +167,39 @@ export const fetchRecentMixes = () => async (dispatch) => {
       return data;
     }
 }; 
+
+export const addSongToMix = (mixId, song) => async (dispatch) => {
+  const response = await fetch(`/api/mixes/${mixId}/songs`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(song)
+  });
+
+  if (response.ok) {
+    const addedSong = await response.json();
+    dispatch(addSongUpdate(mixId, addedSong));
+    return addedSong;
+  } else {
+    const errors = await response.json();
+    return { errors };
+  }
+;}
+
+export const removeSongFromMix = (mixId, songId) => async (dispatch) => {
+  const response = await fetch(`/api/mixes/${mixId}/songs/${songId}`, {
+    method: 'DELETE',
+  });
+  
+  if (response.ok) {
+    dispatch(removeSongUpdate(mixId, songId));
+    return { message: 'Song removed' };
+  } else {
+    const errors = await response.json();
+    return errors;
+  }
+};
 
 
 const initialState = {
@@ -276,10 +323,39 @@ const mixReducer = (state = initialState, action) => {
         recentMixes
     }
 
-    default:
-      return state;
+    
+
+    case ADD_SONG_TO_MIX: {
+    const mix = state.singleMix[action.mixId];
+    return {
+      ...state,
+      singleMix: {
+        ...state.singleMix,
+        [action.mixId]: {
+          ...mix,
+          mixsongs: [...(mix.mixsongs || []), action.song]
+        }
+      }
+    }
   }
 
+  case REMOVE_SONG_FROM_MIX: {
+    const mix = state.singleMix[action.mixId];
+    return {
+      ...state,
+      singleMix: {
+        ...state.singleMix,
+        [action.mixId]: {
+          ...mix,
+          mixsongs: mix.mixsongs.filter(song => song.id !== action.songId)
+        }
+      }
+    };
+  }
+
+  default:
+      return state;
+  }
 };
 
 export default mixReducer;

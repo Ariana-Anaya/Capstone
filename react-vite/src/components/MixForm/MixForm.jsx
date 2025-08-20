@@ -11,8 +11,6 @@ import './MixForm.css';
 function MixForm({ onClose, mix = null, onSubmit = null }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchSong, setSearchSong] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
   const [coverUrl, setCoverUrl] = useState(mix ? mix.coverUrl : '');
   const [selectedSongs, setSelectedSongs] = useState( mix ? mix.songs || [] : []);
   const [description, setDescription] = useState(mix ? mix.description : '');
@@ -24,45 +22,6 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
 
   const isEdit = !!mix;
 
-  
-
-  const handleSearchChange = async (e) => {
-    const query = e.target.value;
-    setSearchSong(query);
-    
-    if (query.length < 3) {
-      setSearchResults([]);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/spotify/search?q=${encodeURIComponent(query)}`);
-      if (!res.ok) {
-        setErrors({ search: 'Spotify search failed' });
-        setSearchResults([]);
-        return;
-
-      }
-      const data = await res.json();
-      setSearchResults(data.tracks.items || []);
-    } catch (err) {
-      setErrors({ search: 'Spotify search failed' });
-
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  const addSong = (song) => {
-    if (!selectedSongs.find((s) => s.id === song.id)) {
-        setSelectedSongs([...selectedSongs, song]);
-    }
-  };
-
-  const removeSong = (songId) => {
-    setSelectedSongs(selectedSongs.filter((s) => s.id !== songId));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,9 +35,6 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
       setIsSubmitting(false);
       return;
     }
-
-    
-
 
 
     const mixData = {
@@ -171,62 +127,7 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
             {errors.cover_url && <span className="error-text">{errors.cover_url}</span>}
           </div>
 
-          {errors.general && <p className="error">{errors.general}</p>}
-          <div className="form-group">
-            <label>Search 🔍</label>
-            <div className="song-search">
-                <input
-                  id="spotifySearch"
-                  type="text"
-                  value={searchSong}
-                  onChange={handleSearchChange}
-                  placeholder='Search Song/Album'
-                />
-                       
-             
-
-          {searchResults.length > 0 && (
-            <select
-            value=''
-            onChange={(e) => {
-              const song = searchResults.find((s) => s.id === e.target.value);
-              if (song) {
-                addSong(song);
-                setSearchSong('');
-                setSearchResults([]);
-              }
-            }}
-            className="form-select"
-          >
-              <option value="">Add Songs</option>
-              {searchResults.map((song) => (
-                <option key={song.id} value={song.id}>
-                  {song.name} - {song.artists[0]?.name}
-                  </option>
-              ))}
-            </select>
-          )}
-            {errors.songs && <p className="error">{errors.songs}</p>}
-          </div>
-          </div>
-          
-          {selectedSongs.length > 0 && (
-            <div className="selected-song-list">
-            {selectedSongs.map((song) => (
-                <div key={song.id} className="selected-song-item">
-                {song.name} - {song.artists[0]?.name}
-                <button
-                type="button"
-                className="remove"
-                onClick={() => removeSong(song.id)}
-                >
-                ×
-                </button>
-                </div>
-
-            ))}
-            </div>
-          )}
+          {errors.general && <p className="error">{errors.general}</p>}            
 
 
           <div className="form-actions">
