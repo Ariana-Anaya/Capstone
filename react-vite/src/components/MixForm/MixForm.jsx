@@ -1,5 +1,4 @@
 //mixform.jsx
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -110,7 +109,7 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
       if (result.errors) {
         setErrors(result.errors);
       } else {
-        onClose();
+        navigate('/mixes/manage')
       }
     } catch (error) {
       setErrors({ general: 'Something went wrong. Please try again.' });

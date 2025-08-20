@@ -87,9 +87,9 @@ function MixManagement() {
         <div className="mixes-grid">
           {mixList.map(mix => (
             <div key={mix.id} className="mix-management-card">
-              {mix.previewImage && (
+              {mix.coverUrl && (
                 <img 
-                  src={mix.previewImage} 
+                  src={mix.coverUrl} 
                   alt={mix.name}
                   className="mix-card-image"
                 />

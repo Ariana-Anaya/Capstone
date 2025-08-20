@@ -7,7 +7,7 @@ const DELETE_MIX = 'mixes/DELETE_MIX';
 const CLEAR_MIX = 'mixes/CLEAR_MIX';
 const LOAD_RECENT_MIXES = 'mixes/LOAD_RECENT_MIXES';
 
-
+ 
 
 const loadMixes = (mixes, page, size) => ({
   type: LOAD_MIX,
@@ -189,7 +189,7 @@ const mixReducer = (state = initialState, action) => {
       return {
         ...state,
 
-        singleMix: { [action.mix.id]: action.mix }
+        singleMix: { ...state.singleMix, [action.mix.id]: action.mix }
       };
       
 

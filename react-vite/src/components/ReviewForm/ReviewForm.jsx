@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReview } from '../../redux/reviews';
-
+import { useNavigate } from 'react-router-dom';
 
 import './ReviewForm.css';
 
@@ -18,6 +18,8 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
 
 
   const isEdit = !!review;
@@ -99,7 +101,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
       if (result.errors) {
         setErrors(result.errors);
       } else {
-        onClose();
+        navigate('/reviews/manage')
       }
     } catch (error) {
       setErrors({ general: 'Something went wrong. Please try again.' });

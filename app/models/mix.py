@@ -45,6 +45,7 @@ class Mix(db.Model):
             'description': self.description,
             'coverUrl': self.cover_url,
             'username': self.user.username,
+            'avatarUrl': self.user.avatar_url,
             'numReactions': reaction_counts,
             'createdAt': self.created_at,
             'updatedAt': self.updated_at,
