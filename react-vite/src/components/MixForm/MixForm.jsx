@@ -85,14 +85,19 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
     const mixData = {
       title: name,  
       description,
-      cover_url: coverUrl,
+      cover_url: coverUrl || null,
       songs: selectedSongs.map((s) => ({
         spotify_uri: s.uri,
+        title: s.name,
         artist: s.artists[0]?.name,
         album: s.album?.name,
+        type: s.type || 'song',
+        image_url: s.album?.images[0]?.url || null,
       })),
       
     };
+
+    if(mixData.songs.length === 0) delete mixData.songs;
 
     try {
       let result;

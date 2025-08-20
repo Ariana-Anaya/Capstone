@@ -97,7 +97,7 @@ def create_mix():
         user_id=current_user.id,
         title=data['title'],
         description=data.get('description',''),
-        cover_url=data.get('cover_image', None)
+        cover_url=data.get('cover_url', None)
     )
     
     try:
@@ -116,16 +116,14 @@ def create_mix():
                          album=song_data['album'],
                          type=song_data['type'],
                          image_url=song_data.get('image_url', None),
-                         preview_url=song_data.get('preview_url', None)
                     )
                     db.session.add(song)
-                    db.session.commit()
+                    db.session.flush()
                 
                 mix_song = MixSong(mix_id=mix.id, song_id=song.id)
                 db.session.add(mix_song)
 
             db.session.commit()
-            db.session.refresh(mix)
             
         return jsonify(mix.to_dict_user_and_song()), 201
     except Exception as e:
@@ -164,7 +162,7 @@ def edit_mix(mix_id):
     # update mix
     
     mix.title = data['title']
-    mix.description = data.get('discription', mix.discription)
+    mix.description = data.get('description', mix.description)
     
     
     try:
@@ -230,7 +228,6 @@ def add_song_to_mix(mix_id):
             album=data.get('album'),
             type=data.get('type'),
             image_url=data.get('image_url'),
-            preview=data.get('preview', False)
         )
         db.session.add(song)
         db.session.commit()

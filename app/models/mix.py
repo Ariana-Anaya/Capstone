@@ -43,7 +43,7 @@ class Mix(db.Model):
             'id': self.id,
             'name': self.title,
             'description': self.description,
-            'previewImage': self.cover_url,
+            'coverUrl': self.cover_url,
             'username': self.user.username,
             'numReactions': reaction_counts,
             'createdAt': self.created_at,
