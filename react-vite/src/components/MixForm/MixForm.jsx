@@ -14,7 +14,8 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
   const navigate = useNavigate();
   const [searchSong, setSearchSong] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedSong, setSelectedSong] = useState( mix ? mix.song: null);
+  const [coverUrl, setCoverUrl] = useState(mix ? mix.coverUrl : '');
+  const [selectedSongs, setSelectedSongs] = useState( mix ? mix.songs || [] : []);
   const [description, setDescription] = useState(mix ? mix.description : '');
   const [name, setName] = useState(mix ? mix.name : '');
   const [errors, setErrors] = useState({});
@@ -24,6 +25,7 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
 
   const isEdit = !!mix;
 
+  
 
   const handleSearchChange = async (e) => {
     const query = e.target.value;
@@ -53,18 +55,22 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
     }
   };
 
+  const addSong = (song) => {
+    if (!selectedSongs.find((s) => s.id === song.id)) {
+        setSelectedSongs([...selectedSongs, song]);
+    }
+  };
 
+  const removeSong = (songId) => {
+    setSelectedSongs(selectedSongs.filter((s) => s.id !== songId));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setIsSubmitting(true);
 
-    if (!selectedSong) {
-      setErrors({ song: 'Song/ Album selection is required' });
-      setIsSubmitting(false);
-      return;
-    }
+   
   
     if (!name.trim()) {
       setErrors({ name: 'Mix title is required' });
@@ -79,10 +85,13 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
     const mixData = {
       title: name,  
       description,
-      spotify_uri: selectedSong.uri,
-      artist: selectedSong.artists[0]?.name,
-      album: selectedSong.album?.name,
-      previewImage: selectedSong.album?.images[0]?.url,
+      cover_url: coverUrl,
+      songs: selectedSongs.map((s) => ({
+        spotify_uri: s.uri,
+        artist: s.artists[0]?.name,
+        album: s.album?.name,
+      })),
+      
     };
 
     try {
@@ -145,6 +154,18 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
             </div>
             {errors.description && <p className="error">{errors.description}</p>}
           </div>
+          <div className="form-group">
+            <label htmlFor="cover_url">Cover Image</label>
+            <input
+              type="text"
+              id="cover_url"
+              value={coverUrl}
+              onChange={(e) => setCoverUrl(e.target.value)}
+              placeholder="Enter url for cover image"
+              maxLength={255}
+            />
+            {errors.cover_url && <span className="error-text">{errors.cover_url}</span>}
+          </div>
 
           {errors.general && <p className="error">{errors.general}</p>}
           <div className="form-group">
@@ -162,23 +183,47 @@ function MixForm({ onClose, mix = null, onSubmit = null }) {
 
           {searchResults.length > 0 && (
             <select
-            value={selectedSong?.id || ''}
-            onChange={(e) => 
-              setSelectedSong(searchResults.find((s) => s.id === e.target.value))
-            }
+            value=''
+            onChange={(e) => {
+              const song = searchResults.find((s) => s.id === e.target.value);
+              if (song) {
+                addSong(song);
+                setSearchSong('');
+                setSearchResults([]);
+              }
+            }}
             className="form-select"
           >
-              <option value="">Select a Song</option>
+              <option value="">Add Songs</option>
               {searchResults.map((song) => (
                 <option key={song.id} value={song.id}>
-                  {song.name} - {song.artists[0].name}
+                  {song.name} - {song.artists[0]?.name}
                   </option>
               ))}
             </select>
           )}
-            {errors.song && <p className="error">{errors.song}</p>}
+            {errors.songs && <p className="error">{errors.songs}</p>}
           </div>
           </div>
+          
+          {selectedSongs.length > 0 && (
+            <div className="selected-song-list">
+            {selectedSongs.map((song) => (
+                <div key={song.id} className="selected-song-item">
+                {song.name} - {song.artists[0]?.name}
+                <button
+                type="button"
+                className="remove"
+                onClick={() => removeSong(song.id)}
+                >
+                ×
+                </button>
+                </div>
+
+            ))}
+            </div>
+          )}
+
 
           <div className="form-actions">
             <button

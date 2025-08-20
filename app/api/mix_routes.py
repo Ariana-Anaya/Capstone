@@ -97,7 +97,7 @@ def create_mix():
         user_id=current_user.id,
         title=data['title'],
         description=data.get('description',''),
-        cover_image=data.get('cover_image', None)
+        cover_url=data.get('cover_image', None)
     )
     
     try:

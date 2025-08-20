@@ -4,6 +4,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import ReviewManagement from '../components/ReviewManagement';
 import MixManagement from '../components/MixManagement';
 import ReviewForm from '../components/ReviewForm';
+import MixForm from '../components/MixForm'
 
 import Layout from './Layout';
 
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
       {
         path: "/review/new",
         element: <ReviewForm />,
+      },
+      {
+        path: "/mix/new",
+        element: <MixForm />,
       },
       {
         path: "/reviews/manage",

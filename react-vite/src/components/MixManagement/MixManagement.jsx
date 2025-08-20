@@ -64,7 +64,7 @@ function MixManagement() {
         <p>Manage and view your mixes </p>
         <button 
           className="btn-primary"
-          onClick={() => navigate('/mixes/new')}
+          onClick={() => navigate('/mix/new')}
         >
           ➕ Add New Mix
         </button>
@@ -98,12 +98,7 @@ function MixManagement() {
               <div className="mix-card-content">
                 <h3>{mix.name}</h3>
                                 
-                <div className="mix-stats">
-                  
-                  <span className="">
-                    {mix.numReactions || 0} reactions
-                  </span>
-                </div>
+               
 
                 <div className="mix-actions">
                   <button 
