@@ -6,7 +6,7 @@ import MixManagement from '../components/MixManagement';
 import ReviewForm from '../components/ReviewForm';
 import MixDetails from '../components/MixDetails';
 import MixForm from '../components/MixForm'
-
+import MixList from '../components/MixList'
 import Layout from './Layout';
 
 export const router = createBrowserRouter([
@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <h1>Welcome!</h1>,
+        element: <MixList />,
       },
       {
         path: "/review/new",

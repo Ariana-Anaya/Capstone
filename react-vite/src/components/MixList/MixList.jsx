@@ -21,7 +21,7 @@ function MixList() {
       try {
         setLoading(true);
         setError(null);
-        await dispatch(fetchAllMixes(filters));
+        await dispatch(fetchAllMixes());
       } catch (err) {
         setError('Failed to load mixes. Please try again.');
         console.error('Error fetching mixes:', err);
@@ -47,7 +47,14 @@ function MixList() {
     });
   };
 
-  const mixList = Object.values(mixes);
+  const mixList = Object.values(mixes).filter(mix => {
+    const title = mix.name || '';
+    const username = mix.username || '';
+    return (
+      title.includes(filters.title) &&
+      username.includes(filters.username)
+    );
+  });
 
   return (
     <div className="mix-list-container">
@@ -102,10 +109,10 @@ function MixList() {
                   className="mix-card"
                   onClick={() => navigate(`/mixes/${mix.id}`)}
                 >
-                  {mix.cover_image && (
+                  {mix.coverUrl && (
                     <img 
-                      src={mix.cover_image} 
-                      alt={mix.title}
+                      src={mix.coverUrl} 
+                      alt={mix.name}
                       className="mix-preview-image"
                       onError={(e) => {
                         e.target.style.display = 'none';
@@ -113,11 +120,21 @@ function MixList() {
                     />
                   )}
                   <div className="mix-info">
-                    <h3>{mix.title}</h3>
-                    <p className="mix-username">{mix.user.username}</p>
+                    <h3>{mix.name}</h3>
+                    <div className="mix-username-avatar">
+                      {mix.avatarUrl && (
+                        <img
+                        src={mix.avatarUrl}
+                        alt={mix.username}
+                        className='creator-avatar'
+                        />
+                      )}
+                      <span>{mix.username}</span>
+                      </div>
+                      {mix.description && <p className='mix-description'>{mix.description}</p>}
                     <div className="mix-reactions">
                     
-                      <span className="reactions-text">New</span>
+                      <span className="reactions-container"></span>
                     </div>
                   </div>
                 </div>

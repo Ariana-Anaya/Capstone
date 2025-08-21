@@ -130,12 +130,12 @@ if(mixData.songs.length === 0) delete mixData.songs;
       <div className="mix-header">
           {mix.coverUrl && ( < img
             src={mix.coverUrl}
-            alt={`${mix.title} Cover`}
+            alt={`${mix.name} Cover`}
             className="mix-cover-image"
             />
           )}
           <div className="mix-info">
-            <h1>{mix.title}</h1>
+            <h1>{mix.name}</h1>
             <p>{mix.description}</p>
             {mix.username && (
              <div className="mix-creator">

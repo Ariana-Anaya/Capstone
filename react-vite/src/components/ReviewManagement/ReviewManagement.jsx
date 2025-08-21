@@ -72,8 +72,20 @@ function ReviewManagement() {
         <div className="reviews-grid">
           {reviews.map(review => (
             <div key={review.id} className="review-card">
+              {review.songId?.imageUrl && (
+                <div className="review-image">
+                <img
+                src={review.songId.imageUrl}
+                alt={review.songId.title}
+                className='song-cover'
+                />
+              </div>
+              )}
+              
               <div className="review-header">
-                <h3>{review.songTitle || review.title}</h3>
+                <h3>{review.songId?.title}</h3>
+                {review.songId?.artist && <p className='review-artist'>{review.songId.artist}</p>}
+                
                 <span className="review-date">
                   {new Date(review.createdAt).toLocaleDateString()}
                 </span>

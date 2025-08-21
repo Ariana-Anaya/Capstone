@@ -107,12 +107,7 @@ function MixManagement() {
                   >
                     View Details
                   </button>
-                  <button 
-                    className="btn-edit"
-                    onClick={() => navigate(`/mixes/${mix.id}/edit`)}
-                  >
-                    Edit
-                  </button>
+                  
                   <button 
                     className="btn-delete"
                     onClick={() => setDeleteModal(mix)}
