@@ -40,7 +40,6 @@ function ProfileButton() {
     dispatch(thunkLogout());
     closeMenu();
   };
-  console.log('profile user:', user);
   return (
     <>
       <button onClick={toggleMenu} className="profile-button">
@@ -72,8 +71,8 @@ function ProfileButton() {
                   <FaUserCircle size={32} />
               )}
                   <div className="user-text">
-                    <h4>{user.user.firstName}</h4>
-                    <p>{user.user.username}</p>
+                    <h4>{user.user?.firstName}</h4>
+                    <p>{user.user?.username}</p>
                   </div>
                 </div>
               </div>
