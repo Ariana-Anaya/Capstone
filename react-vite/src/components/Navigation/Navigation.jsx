@@ -19,6 +19,7 @@ function Navigation() {
             <NavLink to="/" className="nav-link">Home</NavLink>
           </li>
         </ul>
+        
 
         <div className="auth-section">
           {sessionUser ? (

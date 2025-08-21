@@ -164,7 +164,8 @@ export const fetchRecentReviews = () => async (dispatch) => {
   const initialState = {
     songReviews: {},
     userReviews: {},
-    singleReview: {}
+    singleReview: {},
+    allReviews: {}
   };
   
   const reviewsReducer = (state = initialState, action) => {

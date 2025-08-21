@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchAllReviews } from '../../redux/reviews';
+import { fetchRecentReviews } from '../../redux/reviews';
 import './ReviewList.css';
 
 function ReviewList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const reviews = useSelector(state => state.reviews.allReviews);
+  Object.values(reviews).forEach((review) => {
+    console.log("Single review object:", review);
+  });
   const [filters, setFilters] = useState({
-    song_title: '',
+    title: '',
     username: '',
   });
   const [loading, setLoading] = useState(true);
@@ -21,7 +24,7 @@ function ReviewList() {
       try {
         setLoading(true);
         setError(null);
-        await dispatch(fetchAllReviews(filters));
+        await dispatch(fetchRecentReviews(filters));
       } catch (err) {
         setError('Failed to load reviews. Please try again.');
         console.error('Error fetching reviews:', err);
@@ -31,7 +34,7 @@ function ReviewList() {
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [dispatch, filters]);
+  }, [dispatch]);
 
   const handleFilterChange = (filterName, value) => {
     setFilters(prev => ({
@@ -40,6 +43,15 @@ function ReviewList() {
     }));
   };
 
+  const reviewList = Object.values(reviews).filter(review => {
+    const title = review.songId?.title || '';
+    const username = review.username || '';
+    return (
+      title.includes(filters.title) &&
+      username.includes(filters.username)
+    );
+  });
+
   const clearFilters = () => {
     setFilters({
       title: '',
@@ -47,27 +59,20 @@ function ReviewList() {
     });
   };
 
-  const reviewList = Object.values(reviews);
-
+  
+  
   return (
     <div className="review-list-container">
       <div className="filters-section">
-        <h2>Filter Reviews</h2>
+        <h2>Search Reviews</h2>
         <div className="filters">
-          <select
-            value={filters.category}
-            onChange={(e) => handleFilterChange('category', e.target.value)}
-          >
-            <option value="">All Filters</option>
-           
-         
-          </select>
+          
 
           <input
             type="text"
-            placeholder="Song"
-            value={filters.song_title}
-            onChange={(e) => handleFilterChange('Song', e.target.value)}
+            placeholder="Title"
+            value={filters.title}
+            onChange={(e) => handleFilterChange('title', e.target.value)}
           />
 
           <input
@@ -76,8 +81,6 @@ function ReviewList() {
             value={filters.username}
             onChange={(e) => handleFilterChange('username', e.target.value)}
           />
-           
-          
 
           <button onClick={clearFilters}>Clear Filters</button>
         </div>
@@ -109,10 +112,10 @@ function ReviewList() {
                   className="review-card"
                   onClick={() => navigate(`/reviews/${review.id}`)}
                 >
-                  {review.previewImage && (
+                  {review.songId?.imageUrl && (
                     <img 
-                      src={review.previewImage} 
-                      alt={review.name}
+                      src={review.songId.imageUrl} 
+                      alt={review.songId.title}
                       className="review-preview-image"
                       onError={(e) => {
                         e.target.style.display = 'none';
@@ -120,14 +123,12 @@ function ReviewList() {
                     />
                   )}
                   <div className="review-info">
-                    <h3>{review.song.title}</h3>
-                    <p className="review-title">{review.song_title}</p>
+                    <h3>{review.songId?.title}</h3>
+                    <p className="review-title">{review.songId?.title}</p>
                     <p className="review-username">{review.username}</p>
                     <div className="review-reactions">
                     
-                      <span className="reactions-text">
-                        {review.numReactions ? review.numReactions.toFixed(1) : 'New'}
-                      </span>
+                     
                     </div>
                   </div>
                 </div>
@@ -147,5 +148,5 @@ function ReviewList() {
     </div>
   );
 }
-
+ 
 export default ReviewList;
