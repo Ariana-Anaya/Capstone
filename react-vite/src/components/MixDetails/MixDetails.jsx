@@ -157,6 +157,27 @@ if(mixData.songs.length === 0) delete mixData.songs;
                 Edit Mix Details
                </button>
             )}
+            <button
+                className='done-btn'
+                 onClick={async () => {
+                    const updatedMix = {
+                        songs: selectedSongs.map((s) => ({
+                          spotify_uri: s.uri,
+                          title: s.name,
+                          artist: s.artists[0]?.name,
+                          album: s.album?.name,
+                          type: s.type || 'song',
+                          image_url: s.album?.images[0]?.url || null,
+                          }))
+
+                       };
+                        await handleEditSubmit(updatedMix);
+                        setIsEditing(false);
+                        navigate('/mixes/manage')
+                          }}
+                          >
+                            Done
+                            </button>
             </div>
            </div>
 
@@ -240,16 +261,21 @@ if(mixData.songs.length === 0) delete mixData.songs;
             ))}
             </div>
           )}
-                        </div>
+            </div>
+            
                         {isEditing && (
+                          <div className='edit-mix-footer'>
                             <MixForm
                             mix={mix}
                             onClose={() => setIsEditing(false)}
                             onSubmit={handleEditSubmit}
                             />
-                        )}
+                            
                         </div>
+                      )}
+                  </div>
                 );
-            }        
+              }
+                
             
 export default MixDetails;

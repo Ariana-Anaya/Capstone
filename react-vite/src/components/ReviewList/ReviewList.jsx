@@ -133,7 +133,7 @@ function ReviewList() {
                     <h3>{review.songId?.title}</h3>
                     <p className="review-artist">{review.songId?.artist}</p>
                     <p className="review-username">
-                      {review.user.username}
+                      {review.user?.username}
                       </p>
                       {review.user?.avatarUrl && (
                         <img

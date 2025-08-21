@@ -16,7 +16,12 @@ function Navigation() {
 
         <ul className="nav-links">
           <li>
-            <NavLink to="/" className="nav-link">Home</NavLink>
+            <NavLink to="/" className="nav-link">Mixes</NavLink>
+          </li>
+        </ul>
+        <ul className="nav-links">
+          <li>
+            <NavLink to="/reviews/browse" className="nav-link">Reviews</NavLink>
           </li>
         </ul>
         
