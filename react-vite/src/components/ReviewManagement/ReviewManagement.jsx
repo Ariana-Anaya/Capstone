@@ -13,7 +13,7 @@ function ReviewManagement() {
   const userReviews = useSelector(state => state.reviews.userReviews);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState(null);
-  const [editingReviewId, setEditingReviewId] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
 
 
   useEffect(() => {
@@ -81,13 +81,13 @@ function ReviewManagement() {
         <div className="reviews-grid">
           {reviews.map(review => (
             <div key={review.id} className='review-container'>
-              {editingReviewId === review.id ? (
+              {editingReview && editingReview?.id === review.id ? (
                 <ReviewForm
-                review={review}
-                onClose={() => setEditingReviewId(null)}
+                review={editingReview}
+                onClose={() => setEditingReview(null)}
                 onSubmit={async (updatedData) => {
-                  const result = await dispatch(editReview(review.id, updatedData));
-                  if (!result.errors) setEditingReviewId(null);
+                  const result = await dispatch(editReview(editingReview.id, updatedData));
+                  if (!result.errors) setEditingReview(null);
                   return result;
                 }}
                 />
@@ -125,7 +125,7 @@ function ReviewManagement() {
               <div className="review-actions">
               <button
                 className='edit-review-btn'
-                onClick={() => setEditingReviewId(review.id)}
+                onClick={() => setEditingReview(review)}
                >
                 Edit
                </button>

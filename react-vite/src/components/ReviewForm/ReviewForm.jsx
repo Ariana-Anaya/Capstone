@@ -53,11 +53,18 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
     }
   };
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      navigate('/reviews/manage')
+    }
+  }; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setIsSubmitting(true);
+    setIsSubmitting(true);  
 
     if (!isEdit && !selectedSong) {
       setErrors({ song: 'Song/ Album selection is required' });
@@ -131,10 +138,9 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
 
   return (
     <div className="review-form-overlay">
-      <div className="review-form-container">
+      <div className="review-form-container" onClick={e => e.stopPropagation()}>
         <div className="review-form-header">
           <h2>{isEdit ? 'Edit Review' : 'Write a Review'}</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <form onSubmit={handleSubmit} className="review-form">
@@ -178,7 +184,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
             <div className='song-spotify'>
               
                 <img
-                src={review.songId.image_url}
+                src={review.songId.imageUrl}
                 alt={review.songId.title}
                 className='song-cover'
                 />
@@ -227,7 +233,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
           {errors.general && <p className="error">{errors.general}</p>}
 
           <div className="form-actions">
-            <button type="button" onClick={onClose} className="cancel-btn">
+            <button type="button" className="cancel-btn" onClick={handleClose}>
               Cancel
             </button>
             <button type="submit" disabled={isSubmitting} className="submit-btn">
