@@ -11,7 +11,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
   const dispatch = useDispatch();
   const [searchSong, setSearchSong] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedSong, setSelectedSong] = useState( review ? review.song: null);
+  const [selectedSong, setSelectedSong] = useState(null);
   const [reviewText, setReviewText] = useState(review ? review.review : '');
   const [rating, setRating] = useState(review ? review.rating : 0);
   const [hoveredStar, setHoveredStar] = useState(0);
@@ -54,13 +54,12 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
   };
 
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setIsSubmitting(true);
 
-    if (!selectedSong) {
+    if (!isEdit && !selectedSong) {
       setErrors({ song: 'Song/ Album selection is required' });
       setIsSubmitting(false);
       return;
@@ -78,9 +77,16 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
       return;
     }
 
+  let reviewData;
 
+  if (isEdit) {
+    reviewData = {
+      review: reviewText,
+      rating: rating,
+    };
+  } else {
 
-    const reviewData = {
+    reviewData = {
       spotify_uri: selectedSong.uri,
       title: selectedSong.name,
       artist: selectedSong.artists[0]?.name,
@@ -89,6 +95,7 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
       review: reviewText,
       rating: rating
     };
+  }
 
     try {
       let result;
@@ -131,7 +138,9 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
         </div>
 
         <form onSubmit={handleSubmit} className="review-form">
+        {!isEdit ? ( 
           <div className="form-group">
+            
             <label>Search 🔍</label>
             <div className="song-search">
                 <input
@@ -163,10 +172,23 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
             {errors.song && <p className="error">{errors.song}</p>}
           </div>
           </div>
-
-
-
-
+        ) : (
+          <div className='form-group song-selected-song-display'>
+            <label>Editing Review For:</label>
+            <div className='song-spotify'>
+              
+                <img
+                src={review.songId.image_url}
+                alt={review.songId.title}
+                className='song-cover'
+                />
+              
+            </div>
+            <p>{review.songId.title}</p>
+            <p>{review.songId.artist }</p>
+          </div>
+          
+            )}
 
           <div className="form-group">
             <label>Rating</label>

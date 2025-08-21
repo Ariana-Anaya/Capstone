@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchMyReviews, removeReview } from '../../redux/reviews';
+import { fetchMyReviews, removeReview, editReview } from '../../redux/reviews';
+import ReviewForm from '../ReviewForm'
 import './ReviewManagement.css';
 
 function ReviewManagement() {
@@ -12,6 +13,8 @@ function ReviewManagement() {
   const userReviews = useSelector(state => state.reviews.userReviews);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState(null);
+  const [editingReviewId, setEditingReviewId] = useState(false);
+
 
   useEffect(() => {
     if (!user) {
@@ -58,6 +61,12 @@ function ReviewManagement() {
       <div className="management-header">
         <h1>My Reviews</h1>
         <p>Manage and edit your posted reviews</p>
+        <button 
+          className="btn-primary"
+          onClick={() => navigate('/review/new')}
+        >
+          🎧 Add New Review
+        </button>
       </div>
 
       {reviews.length === 0 ? (
@@ -71,7 +80,19 @@ function ReviewManagement() {
       ) : (
         <div className="reviews-grid">
           {reviews.map(review => (
-            <div key={review.id} className="review-card">
+            <div key={review.id} className='review-container'>
+              {editingReviewId === review.id ? (
+                <ReviewForm
+                review={review}
+                onClose={() => setEditingReviewId(null)}
+                onSubmit={async (updatedData) => {
+                  const result = await dispatch(editReview(review.id, updatedData));
+                  if (!result.errors) setEditingReviewId(null);
+                  return result;
+                }}
+                />
+              ) : (
+            <div className="review-card">
               {review.songId?.imageUrl && (
                 <div className="review-image">
                 <img
@@ -84,7 +105,9 @@ function ReviewManagement() {
               
               <div className="review-header">
                 <h3>{review.songId?.title}</h3>
-                {review.songId?.artist && <p className='review-artist'>{review.songId.artist}</p>}
+                {review.songId?.artist && (
+                <p className='review-artist'>{review.songId.artist}</p>
+              )}
                 
                 <span className="review-date">
                   {new Date(review.createdAt).toLocaleDateString()}
@@ -100,22 +123,24 @@ function ReviewManagement() {
               </p>
 
               <div className="review-actions">
-                <button 
-                  className="btn-edit"
-                  onClick={() => navigate(`/reviews/${review.id}/edit`)}
-                >
-                  Edit
-                </button>
+              <button
+                className='edit-review-btn'
+                onClick={() => setEditingReviewId(review.id)}
+               >
+                Edit
+               </button>
                 <button 
                   className="btn-delete"
-                  onClick={() => setDeleteModal(review)}
+                  onClick={() => setDeleteModal(review)} 
                 >
                   Delete
                 </button>
               </div>
             </div>
-          ))}
+          )}
         </div>
+      ))}
+      </div>
       )}
 
       {deleteModal && (

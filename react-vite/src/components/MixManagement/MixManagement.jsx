@@ -66,7 +66,7 @@ function MixManagement() {
           className="btn-primary"
           onClick={() => navigate('/mix/new')}
         >
-          ➕ Add New Mix
+          💿 Add New Mix
         </button>
       </div>
 
