@@ -24,7 +24,7 @@ function Navigation() {
           {sessionUser ? (
             <div className="user-info">
               <span className="welcome-message">
-                Welcome, {sessionUser.firstName}!
+                Hey, {sessionUser.username}
               </span>
               <ProfileButton />
             </div>

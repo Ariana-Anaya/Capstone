@@ -40,11 +40,20 @@ function ProfileButton() {
     dispatch(thunkLogout());
     closeMenu();
   };
-
+  console.log('profile user:', user);
   return (
     <>
       <button onClick={toggleMenu} className="profile-button">
+        {user?.user?.avatarUrl ? (
+          <img
+          src={user.user.avatarUrl}
+          alt={user.user.username}
+          className="user-avatar"
+          />
+        ) : (
+        
         <FaUserCircle size={24} />
+        )}
       </button>
       {showMenu && (
         <div className="profile-dropdown" ref={ulRef}>
@@ -52,10 +61,19 @@ function ProfileButton() {
             <>
               <div className="user-details">
                 <div className="user-info-header">
+                {user?.user?.avatarUrl ? (
+                 <img
+                  src={user.user.avatarUrl}
+                  alt={user.user.username}
+                  className="user-avatar"
+                />
+                ) : (
+        
                   <FaUserCircle size={32} />
+              )}
                   <div className="user-text">
-                    <h4>{user.firstName} {user.lastName}</h4>
-                    <p>{user.email}</p>
+                    <h4>{user.user.firstName}</h4>
+                    <p>{user.user.username}</p>
                   </div>
                 </div>
               </div>
