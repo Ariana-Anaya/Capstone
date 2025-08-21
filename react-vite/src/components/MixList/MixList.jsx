@@ -107,7 +107,7 @@ function MixList() {
                 <div
                   key={mix.id}
                   className="mix-card"
-                  onClick={() => navigate(`/mixes/${mix.id}`)}
+                  onClick={() => navigate(`/mixes/${mix.id}/view`)}
                 >
                   {mix.coverUrl && (
                     <img 
