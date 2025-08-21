@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { fetchRecentReviews } from '../../redux/reviews';
+import { addReviewReaction, removeReactionFromReview } from '../../redux/reactions';
 import './ReviewList.css';
 
 function ReviewList() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const reviews = useSelector(state => state.reviews.allReviews);
-  Object.values(reviews).forEach((review) => {
-    console.log("Single review object:", review);
-  });
+  const reactions = useSelector(state => state.reactions.allReactions || {});
+  // Object.values(reviews).forEach((review) => {
+  //   console.log("Single review object:", review);
+  // });
+
   const [filters, setFilters] = useState({
     title: '',
     username: '',
@@ -42,6 +43,13 @@ function ReviewList() {
       [filterName]: value
     }));
   };
+
+ const handleAddReaction = async (reviewId) => {
+     const result = await dispatch(addReviewReaction(reviewId, "like"));
+     if (result.errors) {
+       setErrors(result.errors);
+     }
+     };
 
   const reviewList = Object.values(reviews).filter(review => {
     const title = review.songId?.title || '';
@@ -110,7 +118,6 @@ function ReviewList() {
                 <div
                   key={review.id}
                   className="review-card"
-                  onClick={() => navigate(`/reviews/${review.id}`)}
                 >
                   {review.songId?.imageUrl && (
                     <img 
@@ -124,9 +131,27 @@ function ReviewList() {
                   )}
                   <div className="review-info">
                     <h3>{review.songId?.title}</h3>
-                    <p className="review-title">{review.songId?.title}</p>
-                    <p className="review-username">{review.username}</p>
+                    <p className="review-artist">{review.songId?.artist}</p>
+                    <p className="review-username">
+                      {review.username}
+                      </p>
+                      {review.user?.avatarUrl && (
+                        <img
+                        src={review.user.avatarUrl}
+                        alt={review.user.firstName}
+                        className='review-avatar'
+                        />
+                      )}
+                      <p className='review-rating'>⭐ {review.rating} / 5</p>
+                    <p className='review-text'>{review.review}</p>
                     <div className="review-reactions">
+                      <button
+                      className='reaction-btn'
+                      onClick={() => handleAddReaction(review.id)}
+                      >
+                        🎵 {Object.values(reactions).filter(r => r.reviewId === review.id).length}
+
+                      </button>
                     
                      
                     </div>
