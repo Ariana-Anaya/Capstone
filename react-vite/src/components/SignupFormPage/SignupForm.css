@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1C0034 0%, #3e0772 100%);
+    background: linear-gradient(135deg, #1C0034 0%, #0D051C 100%);
     padding: 20px;
   }
   
@@ -64,6 +64,7 @@
   }
   
   .form-group input {
+    color: #555 !important; 
     padding: 12px 16px;
     border: 2px solid #e1e5e9;
     border-radius: 8px;
@@ -73,8 +74,9 @@
   }
   
   .form-group input:focus {
+    color: #555 !important;
     outline: none;
-    border-color: #667eea;
+    border-color: var(--purple-two);
     background-color: white;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }

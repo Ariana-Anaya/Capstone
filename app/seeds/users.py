@@ -8,7 +8,7 @@ def seed_users():
         username='Demo',
         email='demo@aa.io', 
         password='password',
-        avatar_url="",
+        avatar_url="https://images.pexels.com/photos/633432/pexels-photo-633432.jpeg",
         bio="Generic Biography with statement about how my music taste is better than everyone elses",
     )
     marnie = User(
