@@ -55,7 +55,7 @@
   .edit-mix-btn {
     margin-top: 15px;
     padding: 8px 16px;
-    background: #007bff;
+    background: #764ba2;
     color: white;
     border: none;
     border-radius: 4px;
@@ -65,7 +65,7 @@
   }
   
   .edit-mix-btn:hover {
-    background: #0056b3;
+    background: #58337d;
   }
   
   .song-list-container h3 {

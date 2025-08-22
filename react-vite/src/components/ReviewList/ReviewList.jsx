@@ -145,7 +145,7 @@ function ReviewList() {
                         {review.user?.username}
 
                       </div>
-                      <p className='review-rating'>⭐ {review.rating} / 5</p>
+                      <p className='review-rating'>★ {review.rating} / 5</p>
                     <p className='review-text'>{review.review}</p>
                     <div className="review-reactions">
                       <button

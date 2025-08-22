@@ -1,3 +1,10 @@
+/* var(--text-white)
+var(--purple-two)
+var(--charcoal)
+var(--border-subtle)
+var(--red)
+var(--text-hover-white) */
+
 .mix-management-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -149,7 +156,7 @@
   }
   
   .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-pink) 100%);
     color: white;
     padding: 12px 24px;
     font-size: 16px;
@@ -174,13 +181,13 @@
   }
   
   .btn-edit {
-    background: #667eea;
+    background: var(--light-blue);
     color: white;
     flex: 1;
   }
   
   .btn-edit:hover {
-    background: #5a6fd8;
+    background: #764ba2;
     transform: translateY(-1px);
   }
   

@@ -85,7 +85,7 @@
   }
   
   .review-rating {
-    color: #ffc107;
+    color: var(--neon-pink);
     font-weight: 600;
     font-size: 16px;
   }

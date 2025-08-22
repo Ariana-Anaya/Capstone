@@ -115,7 +115,7 @@ function ReviewManagement() {
               </div>
 
               <div className="review-rating">
-                ⭐ {review.rating} / 5
+              ★ {review.rating} / 5
               </div>
 
               <p className="review-body">

@@ -132,7 +132,7 @@
   }
   
   .stars {
-    color: #ffc107;
+    color: var(--neon-pink);
     font-size: 16px;
   }
   

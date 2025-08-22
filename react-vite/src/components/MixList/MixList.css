@@ -6,7 +6,7 @@
   }
   
   .filters-section {
-    background: white;
+    background: #1C0034;
     padding: 25px;
     border-radius: 12px;
     margin-bottom: 40px;
@@ -49,7 +49,7 @@
   
   .filters button {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-pink) 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -135,16 +135,8 @@
     margin-top: 8px;
   }
   
-  .stars {
-    color: #ffc107;
-    font-size: 16px;
-  }
   
-  .rating-text {
-    color: #666;
-    font-size: 14px;
-  }
-  
+ 
   /* Loading and Error States */
   .loading-container {
     display: flex;

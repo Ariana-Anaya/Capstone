@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1C0034 0%, #3e0772 100%);
     padding: 20px;
   }
   
@@ -91,7 +91,7 @@
   }
   
   .signup-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E8129B 0%, #E8129B 100%);
     color: white;
     padding: 14px;
     border: none;
@@ -105,7 +105,7 @@
   
   .signup-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   }
   
   .signup-button:active {
@@ -125,7 +125,7 @@
   }
   
   .auth-links a {
-    color: #667eea;
+    color: #00F0FF;
     font-weight: 500;
     text-decoration: none;
     transition: color 0.2s ease;

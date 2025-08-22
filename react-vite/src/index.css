@@ -1,5 +1,18 @@
 /* TODO: Add sitewide styles */
-/* Global Styles */
+:root {
+  --purple-one: #1C0034;
+  --purple-two: #0D051C;
+  --neon-pink: #E8129B;
+  --neon-blue: #00F0FF;
+  --text-white: #E0E0E0;
+  --text-hover-white: #FFFFFF;
+  --light-pink: rgba(232, 18, 155, 0.15);
+  --light-blue: rgba(0, 240, 255, 0.15);
+  --red: #E02B54;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-focus: rgba(255, 255, 255, 0.3);
+  --charcoal: rgba(0, 0, 0, 0.4);
+}
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +25,7 @@
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f8f9fa;
+    background-color: #dfdde0db;
     color: #333;
     line-height: 1.6;
   }
@@ -40,7 +53,7 @@
   
   /* Link styles */
   a {
-    color: #667eea;
+    color: var(--neon-blue);
     text-decoration: none;
     transition: color 0.2s ease;
   }
@@ -82,7 +95,7 @@
     height: 40px;
     border: 4px solid rgba(102, 126, 234, 0.3);
     border-radius: 50%;
-    border-top-color: #667eea;
+    border-top-color: var(--neon-pink);
     animation: spin 1s ease-in-out infinite;
   }
   
@@ -92,49 +105,49 @@
   
   /* Card styles */
   .card {
-    background: white;
+    background: var(p);
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 15px var(--charcoal);
+    border: 1px solid var(--border-subtle);
     overflow: hidden;
     transition: all 0.3s ease;
   }
   
   .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 25px var(--charcoal);
   }
   
   .card-header {
     padding: 20px 25px;
-    border-bottom: 1px solid #e9ecef;
-    background: #f8f9fa;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--purple-two);
   }
   
   .card-body {
     padding: 25px;
   }
-  
+   
   /* Button variants */
   .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-pink) 100%);
+    color: var(--text-hover-white);
     border: none;
   }
   
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 6px 20px var(--light-blue);
   }
   
   .btn-secondary {
-    background: #6c757d;
-    color: white;
+    background: var(--purple-two);
+    color: var(--text-white);
     border: none;
   }
   
   .btn-secondary:hover {
-    background: #5a6268;
+    background: var(--purple-two);
   }
   
   .btn-success {
@@ -148,12 +161,12 @@
   }
   
   .btn-danger {
-    background: #dc3545;
+    background: var(--red);
     color: white;
     border: none;
   }
   
   .btn-danger:hover {
-    background: #c82333;
+    background: var(--red);
   }
   

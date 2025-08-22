@@ -12,7 +12,7 @@
 }
 
 .review-form-container {
-  background: white;
+  background: var(--purple-two);
   border-radius: 8px;
   width: 90%;
   max-width: 600px;
@@ -30,7 +30,7 @@
 
 .review-form-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--neon-pink);
 }
 
 .close-btn {
@@ -65,27 +65,65 @@
   font-weight: 600;
   color: #333;
 }
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  background: var(--border-subtle);
+  color: white;
+  border-radius: 8px;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.song-search {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.song-selected-song-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.song-selected-song-display img {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
 
 .star-rating {
   display: flex;
-  gap: 5px;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
 .star {
   font-size: 28px;
-  color: #ddd;
+  color: var(--border-subtle);
   cursor: pointer;
   transition: color 0.2s;
   user-select: none;
 }
 
 .star.active {
-  color: #ffc107;
+  color: var(--neon-pink);
 }
 
 .star:hover {
-  color: #ffc107;
+  color: var(--neon-pink);
+}
+
+.character-count {
+  font-size: 12px;
+  color: white;
+  opacity: 0.6;
+  text-align: right;
+  margin-top: 5px;
 }
 
 #review-text {
@@ -105,12 +143,7 @@
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-.character-count {
-  text-align: right;
-  font-size: 12px;
-  color: #666;
-  margin-top: 5px;
-}
+
 
 .error {
   color: #dc3545;
@@ -143,7 +176,7 @@
   background: #6c757d;
   color: white;
 }
-
+ 
 .cancel-btn:hover {
   background: #5a6268;
 }
