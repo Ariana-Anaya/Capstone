@@ -14,10 +14,11 @@ function SignupFormPage() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   if (sessionUser) return <Navigate to="/" replace={true} />;
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,6 +36,7 @@ function SignupFormPage() {
         first_name: firstName,
         last_name: lastName,
         password,
+        ...(avatarUrl && { avatar_url: avatarUrl }),
       })
     );
 
@@ -129,6 +131,18 @@ function SignupFormPage() {
               required
             />
             {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="avatar">Avatar(optional)</label>
+            <input
+              id="avatar"
+              type="test"
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              placeholder="Upload Url"
+              required
+            />
           </div>
 
           {errors.server && <p className="error">{errors.server}</p>}

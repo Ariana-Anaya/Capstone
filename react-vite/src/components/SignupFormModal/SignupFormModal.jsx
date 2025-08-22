@@ -11,6 +11,7 @@ function SignupFormModal() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
@@ -32,6 +33,7 @@ function SignupFormModal() {
         first_name: firstName,
         last_name: lastName,
         password,
+        ...(avatarUrl && { avatar_url: avatarUrl }),
       })
     );
 
@@ -109,6 +111,15 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+        <label>
+          avatarUrl (optional)
+          <input
+            type="text"
+            value={avatarUrl}
+            onChange={(e) => setAvatarUrl(e.target.value)}
+            placeholder="url link"
+          />
+        </label>
         <button type="submit">Sign Up</button>
       </form>
     </>
