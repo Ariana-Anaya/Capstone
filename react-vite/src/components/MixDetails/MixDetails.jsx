@@ -75,8 +75,9 @@ const handleSearchChange = async (e) => {
       dispatch(fetchMixDetails(mixId));
       setSearchSong('');
       setSearchResults([]);
+      setErrors({ songs: null });
     } else {
-      setErrors({ songs: result.errors });
+      setErrors({ songs: result.errors.message || "Failed to Add Song" });
     }
     };
 
