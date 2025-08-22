@@ -35,7 +35,7 @@ function ReviewList() {
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [dispatch]);
+  }, [dispatch, filters]);
 
   const handleFilterChange = (filterName, value) => {
     setFilters(prev => ({
@@ -47,13 +47,15 @@ function ReviewList() {
  const handleAddReaction = async (reviewId) => {
      const result = await dispatch(addReviewReaction(reviewId, "like"));
      if (result.errors) {
-       setErrors(result.errors);
-     }
-     };
+      alert(result.errors.message || "Something went wrong");
+  } else if (result.alreadyReacted) {
+    alert("You already reacted to this review!");
+  }
+};
 
   const reviewList = Object.values(reviews).filter(review => {
-    const title = review.songId?.title || '';
-    const username = review.username || '';
+    const title = review.song?.title || '';
+    const username = review.user.username || '';
     return (
       title.includes(filters.title) &&
       username.includes(filters.username)
@@ -132,16 +134,17 @@ function ReviewList() {
                   <div className="review-info">
                     <h3>{review.songId?.title}</h3>
                     <p className="review-artist">{review.songId?.artist}</p>
-                    <p className="review-username">
-                      {review.user?.username}
-                      </p>
+                      <div className='review-username'>
                       {review.user?.avatarUrl && (
                         <img
                         src={review.user.avatarUrl}
                         alt={review.user.firstName}
-                        className='review-avatar'
+                        className='creator-avatar'
                         />
                       )}
+                        {review.user?.username}
+
+                      </div>
                       <p className='review-rating'>⭐ {review.rating} / 5</p>
                     <p className='review-text'>{review.review}</p>
                     <div className="review-reactions">
@@ -149,7 +152,7 @@ function ReviewList() {
                       className='reaction-btn'
                       onClick={() => handleAddReaction(review.id)}
                       >
-                        🎵 {Object.values(reactions).filter(r => r.reviewId === review.id).length}
+                        👍 {Object.values(reactions).filter(r => r.reviewId === review.id).length}
 
                       </button>
                     

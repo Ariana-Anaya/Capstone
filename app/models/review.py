@@ -54,5 +54,10 @@ class Review(db.Model):
             'numReactions': reaction_counts,
             'createdAt': self.created_at,
             'updatedAt': self.updated_at,
+            'user': {
+                'id': self.user.id,
+                'username': self.user.username,
+                'avatarUrl': self.user.avatar_url,
+            }
         }
 

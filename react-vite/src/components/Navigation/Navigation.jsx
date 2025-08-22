@@ -30,7 +30,7 @@ function Navigation() {
           {sessionUser ? (
             <div className="user-info">
               <span className="welcome-message">
-                Hey, {sessionUser.username}
+                Hey, {sessionUser.user?.username}
               </span>
               <ProfileButton />
             </div>

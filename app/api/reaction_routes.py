@@ -18,9 +18,9 @@ def add_reaction_to_review(review_id):
         return jsonify({"message": "Review couldn't be found"}), 404
     
     
-    existing_reaction = Reaction.query.filter(
-        Reaction.user_id == current_user.id,
-        Reaction.review_id == review_id
+    existing_reaction = Reaction.query.filter_by(
+        user_id=current_user.id,
+        review_id=review_id
     ).first()
     
     if existing_reaction:
