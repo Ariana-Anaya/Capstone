@@ -4,21 +4,21 @@ from sqlalchemy.sql import text
 def seed_mixes():
     mix1 = Mix(
         user_id=3,
-        title="Demo Mix",
+        title="Forever Favorites",
         description="",
         cover_url="https://images.pexels.com/photos/6621701/pexels-photo-6621701.jpeg"
     )
     mix2 = Mix(
         user_id=2,
-        title="Songs for Connie",
+        title="Love Songs",
         description="Songs that make me think of you :)",
-        cover_url=""
+        cover_url="https://images.pexels.com/photos/3944091/pexels-photo-3944091.jpeg"
     )
     mix3 = Mix(
         user_id=1,
         title="Country songs I pretend I dont like",
         description="if you find this... no you didnt",
-        cover_url="https://i.redd.it/ltosspdw8hj41.jpg"
+        cover_url="https://metro.co.uk/wp-content/uploads/2021/10/PRI_206550394-1.jpg"
     )
 
     db.session.add(mix1)

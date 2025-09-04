@@ -3,6 +3,7 @@ import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
 import ReviewManagement from '../components/ReviewManagement';
 import MixManagement from '../components/MixManagement';
+import ProfileView from '../components/ProfileView'
 import ReviewForm from '../components/ReviewForm';
 import MixDetails from '../components/MixDetails';
 import MixForm from '../components/MixForm'
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: "/mixes/manage",
         element: <MixManagement />,
+      },
+      {
+        path: "/profile/:userId",
+        element: <ProfileView />,
       },
       {
         path: "login",

@@ -15,7 +15,7 @@ def seed_users():
         username='marnie',
         email='marnie@aa.io',
         password='password',
-        avatar_url="",
+        avatar_url="https://images.pexels.com/photos/3419700/pexels-photo-3419700.jpeg",
         bio=""
     )
     bobbie = User(

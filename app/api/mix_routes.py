@@ -285,7 +285,7 @@ def remove_song_to_mix(mix_id,song_id):
     
 @mix_routes.route('/recent')
 def get_recent_mixes():
-    mixes = Mix.query.order_by(Mix.created_at.desc()).limit(10).all()
+    mixes = Mix.query.order_by(Mix.created_at.desc()).limit(5).all()
 
     return jsonify({
         "Mixes": [mix.to_dict_user_and_song() for mix in mixes]

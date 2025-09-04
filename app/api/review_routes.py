@@ -174,11 +174,10 @@ def delete_review(review_id):
 
 @review_routes.route('/recent')
 def get_recent_reviews():
-    reviews = Review.query.order_by(Review.created_at.desc()).limit(10).all()
+    reviews = Review.query.order_by(Review.created_at.desc()).limit(5).all()
 
     return jsonify({
         "Reviews": [review.to_dict_with_song_details() for review in reviews]
     })
 
 
-     

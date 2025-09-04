@@ -8,6 +8,7 @@ const CLEAR_MIX = 'mixes/CLEAR_MIX';
 const LOAD_RECENT_MIXES = 'mixes/LOAD_RECENT_MIXES';
 const ADD_SONG_TO_MIX = 'mixes/ADD_SONG_TO_MIX';
 const REMOVE_SONG_FROM_MIX = 'mixes/REMOVE_SONG_FROM_MIX';
+const LOAD_USER_MIXES = 'mixes/LOAD_USER_MIXES';
 
  
 
@@ -61,6 +62,11 @@ const removeSongUpdate = (mixId, songId) => ({
   type: REMOVE_SONG_FROM_MIX,
   mixId,
   songId
+});
+
+const loadUserMixes = (mixes) => ({
+  type: LOAD_USER_MIXES,
+  mixes
 });
 
 export const clearMix = () => ({
@@ -201,12 +207,24 @@ export const removeSongFromMix = (mixId, songId) => async (dispatch) => {
   }
 };
 
+  export const fetchUserMixes = (userId) => async (dispatch) => {
+    const response = await fetch(`/api/users/${userId}/mixes`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log('fetchUserMixes response:', data);
+
+      dispatch(loadUserMixes(data.Mixes));
+      return data;
+    }
+  };
 
 const initialState = {
   allMixes: {},
   singleMix: {},
   userMixes: {},
   recentMixes: {},
+  profileMixes: {},
   page: 1,
   size: 20
 };
@@ -350,6 +368,17 @@ const mixReducer = (state = initialState, action) => {
           mixsongs: mix.mixsongs.filter(song => song.id !== action.songId)
         }
       }
+    };
+  }
+
+  case LOAD_USER_MIXES: {
+    const profileMixes = {};
+    action.mixes.forEach(mix => {
+      profileMixes[mix.id] = mix;
+    });
+    return {
+      ...state,
+      profileMixes
     };
   }
 

@@ -128,6 +128,11 @@ function MixList() {
                         src={mix.avatarUrl}
                         alt={mix.username}
                         className='creator-avatar'
+                        onClick={ (e) => {
+                          e.stopPropagation();
+                          navigate(`/profile/${mix.userId}`);
+                        }}
+                        style={{ cursor: 'pointer' }}
                         />
                       )}
                       <span>{mix.username}</span>

@@ -71,6 +71,7 @@ const loadSongReviews = (songId, reviews) => ({
     
     if (response.ok) {
       const data = await response.json();
+      console.log('fetchUserReviews response:', data);
       dispatch(loadUserReviews(data.Reviews));
       return data;
     }
