@@ -9,12 +9,14 @@ import sessionReducer from "./session";
 import reviewsReducer from "./reviews";
 import mixReducer from "./mixes";
 import reactionReducer from "./reactions"
+import followReducer from "./follows";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   reviews: reviewsReducer,
   mixes: mixReducer,
-  reactions: reactionReducer
+  reactions: reactionReducer,
+  follows: followReducer
 });
 
 let enhancer;

@@ -1,183 +1,115 @@
-// ProfileManagement.jsx
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { fetchMyReviews } from "../../redux/reviews";
-import { fetchMyMixes } from "../../redux/mixes";
-import { fetchFollowers, fetchFollowing, followUser, unfollowUser } from "../../redux/follows";
-import "./ProfileView.css";
+const FOLLOW_USER = 'follows/FOLLOW_USER';
+const UNFOLLOW_USER = 'follows/UNFOLLOW_USER';
+const LOAD_FOLLOWERS = 'follows/LOAD_FOLLOWERS';
+const LOAD_FOLLOWING = 'follows/LOAD_FOLLOWING';
 
-function ProfileView() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { userId } = useParams(); // for profile routes like /users/:userId
-  const sessionUser = useSelector((state) => state.session.user.user); // current logged-in user
-  const userReviews = useSelector((state) => state.reviews.userReviews);
-  const userMixes = useSelector((state) => state.mixes.userMixes);
-  const allFollowers = useSelector((state) => state.follows.allFollowers);
-  const allFollowing = useSelector((state) => state.follows.allFollowing);
+const loadFollowers = (followers) => ({
+    type: LOAD_FOLLOWERS,
+    followers
+  });
 
-  const [profileUser, setProfileUser] = useState(null); // the profile being viewed
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isFollowing, setIsFollowing] = useState(false);
+const loadFollowing = (following) => ({
+    type: LOAD_FOLLOWING,
+    following
+  });
 
-  useEffect(() => {
-    if (!sessionUser) {
-      navigate("/login");
-      return;
+const addFollow = (follow) => ({
+    type: FOLLOW_USER,
+    follow
+  });
+
+const removeFollow = (followId) => ({
+    type: UNFOLLOW_USER,
+    followId
+  });
+
+  export const fetchFollowers = (userId) => async (dispatch) => {
+    const response = await fetch(`/api/users/${userId}/followers`);
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(loadFollowers(data.followers || []));
+        return data;
+    } else {
+      const errors = await response.json();
+      return { errors };
     }
+};
 
-    const loadProfileData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+export const fetchFollowing = (userId) => async (dispatch) => {
+  const response = await fetch(`/api/users/${userId}/following`);
+  if (response.ok) {
+      const data = await response.json();
+      dispatch(loadFollowing(data.following || []));
+      return data;
+    } else {
+      const errors = await response.json();
+      return { errors };
+    }
+};
 
-        // fetch reviews & mixes
-        await dispatch(fetchMyReviews());
-        await dispatch(fetchMyMixes());
-
-        // fetch followers/following
-        await dispatch(fetchFollowers(userId));
-        await dispatch(fetchFollowing(userId));
-
-        // determine profile user
-        if (Number(userId) === sessionUser.id) {
-          setProfileUser(sessionUser);
-        } else {
-          // fetch other user data from backend if needed
-          setProfileUser({
-            id: Number(userId),
-            username: "OtherUser", // placeholder
-            avatarUrl: "",
-            bio: "",
-          });
-        }
-
-        // determine if current user is following profile
-        setIsFollowing(Boolean(allFollowers[sessionUser.id]));
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load profile data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProfileData();
-  }, [dispatch, sessionUser, userId, allFollowers, navigate]);
-
-  const handleFollowClick = async () => {
-    try {
-      if (isFollowing) {
-        await dispatch(unfollowUser(userId));
-        setIsFollowing(false);
-      } else {
-        await dispatch(followUser(userId));
-        setIsFollowing(true);
-      }
-    } catch (err) {
-      console.error("Error following/unfollowing user:", err);
+export const followUser = (userId) => async (dispatch) => {
+    const response = await fetch(`/api/follows/${userId}/follows`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(addFollow(data));
+      return data;
+    } else {
+      const errors = await response.json();
+      return { errors };
     }
   };
 
-  if (!profileUser) return null;
+export const unfollowUser = (userId) => async (dispatch) => {
+    const response = await fetch(`/api/follows/${userId}/unfollow`, {
+      method: 'DELETE',
+    });
+    
+    if (response.ok) {
+      dispatch(removeFollow(userId));
+      return { message: 'User unfollowed' };
+    } else {
+      const errors = await response.json();
+      return errors;
+    }
+  }; 
 
-  const reviews = Object.values(userReviews || {});
-  const mixes = Object.values(userMixes || {});
+  const initialState = {
+    allFollowers: {},
+    allFollowing: {}
+  };
 
-  const recentActivity = [
-    ...reviews.map((r) => ({ type: "review", data: r })),
-    ...mixes.map((m) => ({ type: "mix", data: m })),
-  ].sort((a, b) => new Date(b.data.createdAt) - new Date(a.data.createdAt));
+  const followReducer = (state = initialState, action) => {
+    switch (action.type) {
+      case LOAD_FOLLOWERS:
+        const followersMap = {};
+        action.followers.forEach(f => { followersMap[f.followerId] = f });
+        return { ...state, allFollowers: followersMap };
 
-  return (
-    <div className="profile-page-container">
-      {loading && <p>Loading profile...</p>}
-      {error && <p className="error-message">{error}</p>}
+       case LOAD_FOLLOWING:
+        const followingMap = {};
+        action.following.forEach(f => { followingMap[f.followedId] = f });
+        return { ...state, allFollowing: followingMap };
 
-      {!loading && !error && (
-        <>
-          <div className="profile-info">
-            {profileUser.avatarUrl && (
-              <img
-                src={profileUser.avatarUrl}
-                alt={profileUser.username}
-                className="profile-avatar"
-              />
-            )}
-            <h2>{profileUser.username}</h2>
-            {profileUser.bio && <p>{profileUser.bio}</p>}
+        case FOLLOW_USER:
+          return { 
+            ...state,
+            allFollowing: { ...state.allFollowing, [action.follow.followedId]: action.follow }
 
-            <div className="profile-stats">
-              <span>{Object.keys(allFollowers).length} Followers</span>
-              <span>{Object.keys(allFollowing).length} Following</span>
-            </div>
+          };
 
-            {Number(sessionUser.id) !== Number(profileUser.id) && (
-              <button onClick={handleFollowClick} className="btn-primary">
-                {isFollowing ? "Unfollow" : "Follow"}
-              </button>
-            )}
+          case UNFOLLOW_USER:
+            const newFollowing = { ...state.allFollowing };
+            delete newFollowing[action.followId];
+            return { ...state, allFollowing: newFollowing };
+       
+       
+       default:
+        return state;
+    }
+  }
 
-            {Number(sessionUser.id) === Number(profileUser.id) && (
-              <button
-                onClick={() => navigate("/profile/edit")}
-                className="btn-secondary"
-              >
-                Edit Profile
-              </button>
-            )}
-          </div>
-
-          <div className="recent-activity">
-            <h3>My Recent Activity</h3>
-            {recentActivity.length === 0 ? (
-              <p>No recent activity.</p>
-            ) : (
-              <div className="activity-grid">
-                {recentActivity.map((item) => (
-                  <div
-                    key={`${item.type}-${item.data.id}`}
-                    className="activity-tile"
-                    onClick={() =>
-                      item.type === "review"
-                        ? navigate("/reviews/manage")
-                        : navigate("/mixes/manage")
-                    }
-                  >
-                    {item.type === "review" && item.data.songId?.imageUrl && (
-                      <img
-                        src={item.data.songId.imageUrl}
-                        alt={item.data.songId.title}
-                        className="activity-image"
-                      />
-                    )}
-                    {item.type === "mix" && item.data.coverUrl && (
-                      <img
-                        src={item.data.coverUrl}
-                        alt={item.data.name}
-                        className="activity-image"
-                      />
-                    )}
-                    <div className="activity-info">
-                      <h4>
-                        {item.type === "review"
-                          ? item.data.songId?.title
-                          : item.data.name}
-                      </h4>
-                      <p>{new Date(item.data.createdAt).toLocaleDateString()}</p>
-                      <span>{item.type}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-export default ProfileView;
+  export default followReducer;

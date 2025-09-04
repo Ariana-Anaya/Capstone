@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUserReviews } from "../../redux/reviews";
 import { fetchUserMixes } from "../../redux/mixes";
+import { fetchFollowers, fetchFollowing, followUser, unfollowUser } from "../../redux/follows";
 import "./ProfileView.css";
 
 function ProfileView() {
@@ -13,9 +14,15 @@ function ProfileView() {
 
   const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+
 
   const userReviews = useSelector((state) => state.reviews.userReviews);
   const userMixes = useSelector((state) => state.mixes.profileMixes);
+  const allFollowers = useSelector((state) => state.follows.allFollowers);
+  const allFollowing = useSelector((state) => state.follows.allFollowing);
 
   const isOwner = sessionUser?.id.toString() === userId;
 
@@ -24,16 +31,26 @@ function ProfileView() {
       try {
         setLoading(true);
 
-        // Fetch user info
         const res = await fetch(`/api/users/${userId}`);
         if (res.ok) {
           const data = await res.json();
           setProfileUser(data);
         }
 
-        // Fetch reviews and mixes
         await dispatch(fetchUserReviews(userId));
         await dispatch(fetchUserMixes(userId));
+
+        const followersData = await dispatch(fetchFollowers(userId));
+        const followingData = await dispatch(fetchFollowing(userId));
+       
+        setFollowersCount(followersData.count);
+        setFollowingCount(followingData.count);
+
+        setIsFollowing(
+          followingData.following.some(
+            (f) => f.id.toString() === sessionUser.id.toString()
+          )
+        );
       } catch (err) {
         console.error("Profile load error:", err);
       } finally {
@@ -67,6 +84,28 @@ function ProfileView() {
         )}
         <h2>{profileUser.username}</h2>
         {profileUser.bio && <p>{profileUser.bio}</p>}
+        {!isOwner && (
+    <div className="follow-section">
+      <span>{followersCount} Followers</span>
+      <span>{followingCount} Following</span>
+      <button
+        className="btn-primary"
+        onClick={async () => {
+          if (isFollowing) {
+            await dispatch(unfollowUser(userId));
+            setFollowersCount(c => c - 1);
+            setIsFollowing(false);
+          } else {
+            await dispatch(followUser(userId));
+            setFollowersCount(c => c + 1);
+            setIsFollowing(true);
+          }
+        }}
+      >
+        {isFollowing ? "Unfollow" : "Follow"}
+      </button>
+    </div>
+  )}
 
         {isOwner && (
           <button
@@ -116,8 +155,8 @@ function ProfileView() {
               <div
                 key={`mix-${mix.id}`}
                 className="activity-tile"
-                onClick={() => handleTileClick("mix")}
-              >
+                onClick={() => navigate(`/mixes/${mix.id}/view`)}
+                >
                 {mix.coverUrl && (
                   <img
                     src={mix.coverUrl}
