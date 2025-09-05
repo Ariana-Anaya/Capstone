@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react';
 import { fetchMixDetails } from '../../redux/mixes';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { addMixReaction, removeReactionFromMix } from '../../redux/reactions';
 import './MixSongs.css';
 
 function MixSongs() {
   const { mixId } = useParams();
   const dispatch = useDispatch();
   const mix = useSelector(state => state.mixes.singleMix[mixId]);
- 
+  const reactions = useSelector(state => state.reactions.allReactions || {});
+
+  const mixReactionsCount = Object.values(reactions).filter(r => r.mixId === mix.id).length;
+
   const user = useSelector(state => state.session.user);
 
 
@@ -23,7 +27,22 @@ if (!mix) {
   return <div>Loading...</div>;
 } 
 
+const existingReaction = Object.values(reactions).find(
+  r => r.mixId === mix.id && r.userId === user?.id
+);
 
+const handleToggleReaction = async () => {
+  if (!user) {
+    navigate('/login');
+    return;
+  }
+
+  if (existingReaction) {
+    await dispatch(removeReactionFromMix(existingReaction.id));
+  } else {
+    await dispatch(addMixReaction(mix.id, 'like'));
+  }
+};
 
 
 
@@ -51,9 +70,16 @@ if (!mix) {
                />
                )}
                <span>{mix.username}</span>
+               
                </div>
+               
             )}
-            
+            <button
+            className={`reaction-button ${existingReaction ? 'reacted' : ''}`}
+            onClick={handleToggleReaction}
+          >
+            👍 {mixReactionsCount}
+          </button>
             </div>
            </div>
 

@@ -71,6 +71,7 @@ function ReviewList() {
       await dispatch(addReviewReaction(reviewId, type));
     }
   };
+  
   const reviewList = Object.values(reviews).filter(review => {
     const title = review.song?.title || '';
     const username = review.user.username || '';
@@ -139,7 +140,7 @@ function ReviewList() {
   
                   {review.songId?.imageUrl && (
                     <img
-                      src={review.songId.imageUrl}
+                      src={review.songId.imageUrl} 
                       alt={review.songId?.title}
                       className="reviewfeed-image"
                     />

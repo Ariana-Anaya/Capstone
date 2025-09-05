@@ -10,6 +10,7 @@ function MixDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const mix = useSelector(state => state.mixes.singleMix[mixId]);
+
  
   const user = useSelector(state => state.session.user);
 
@@ -92,7 +93,7 @@ const handleSearchChange = async (e) => {
     }
     };
 
-
+ 
   const handleEditSubmit = async (updatedMix) => {
     const result = await dispatch(editMix(mixId, updatedMix));
     if (!result.errors) {
