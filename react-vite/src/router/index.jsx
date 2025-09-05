@@ -10,6 +10,7 @@ import MixForm from '../components/MixForm'
 import MixList from '../components/MixList'
 import MixSongs from '../components/MixSongs'
 import ReviewList from '../components/ReviewList'
+import SongReviews from '../components/SongReviews'
 import Layout from './Layout';
 
 export const router = createBrowserRouter([
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: "/review/new",
         element: <ReviewForm />,
+      },
+      {
+        path: "/songs/:songId/reviews",
+        element: <SongReviews />,
       },
       {
         path: "/mixes/:mixId",

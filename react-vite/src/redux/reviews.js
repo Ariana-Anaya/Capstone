@@ -9,6 +9,7 @@ const LOAD_MY_REVIEWS = 'reviews/LOAD_MY_REVIEWS';
 const LOAD_RECENT_REVIEWS = 'reviews/LOAD_RECENT_REVIEWS';
 
 
+
 const loadSongReviews = (songId, reviews) => ({
     type: LOAD_SONG_REVIEWS,
     songId,
@@ -56,8 +57,8 @@ const loadSongReviews = (songId, reviews) => ({
   });
   
   
-  export const fetchReviews = (songId) => async (dispatch) => {
-    const response = await fetch(`/api/song/${songId}/reviews`);
+  export const fetchSongReviews = (songId) => async (dispatch) => {
+    const response = await fetch(`/api/reviews/songs/${songId}`);
     
     if (response.ok) {
       const data = await response.json();

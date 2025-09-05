@@ -142,6 +142,8 @@ function ReviewList() {
                     <img
                       src={review.songId.imageUrl} 
                       alt={review.songId?.title}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => navigate(`/songs/${review.songId.id}/reviews`)}
                       className="reviewfeed-image"
                     />
                   )}
@@ -153,25 +155,28 @@ function ReviewList() {
                       <span className="reviewfeed-artist">{review.songId?.artist}</span>
                     </div>
   
-                    <div className="reviewfeed-user">
+                    <div 
+                    className="reviewfeed-user"
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+ 
+                    onClick={ (e) => {
+                            e.stopPropagation();
+                            navigate(`/profile/${review.userId}`);
+                          }}
+                          >
                       {review.user?.avatarUrl && (
                         <img
                           src={review.user.avatarUrl}
                           alt={review.user.username}
                           className="reviewfeed-avatar"
-                          onClick={ (e) => {
-                            e.stopPropagation();
-                            navigate(`/profile/${review.userId}`);
-                          }}
-                          style={{ cursor: 'pointer' }}
+                        
                         />
                       )}
                       <span className="reviewfeed-username">{review.user?.username}</span>
-  
+                      </div>
                       <span className="reviewfeed-rating">
                       <span className="star">★</span> {review.rating} / 5
                     </span>                    
-                    </div>
   
                       <p className="reviewfeed-text">{review.review}</p>
     
@@ -197,7 +202,6 @@ function ReviewList() {
   
                 </div>
                 </div>
-  
               ))
             ) : (
               <div className="no-results">

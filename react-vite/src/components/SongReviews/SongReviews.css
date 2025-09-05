@@ -1,0 +1,117 @@
+.review-songs-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .song-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+  }
+  
+  .song-header-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  
+  .song-header-info h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .song-header-info h3 {
+    margin: 5px 0;
+    font-size: 20px;
+    color: #555;
+  }
+  
+  .song-header-info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #777;
+  }
+  
+
+  .reviews-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .review-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fafafa;
+    transition: box-shadow 0.2s;
+  }
+  
+  .review-card:hover {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+  
+  .review-username {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .review-content {
+    margin-bottom: 10px;
+  }
+  
+  .review-rating {
+    font-weight: bold;
+    color: var(--neon-pink);
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .review-reactions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .review-reaction-button {
+    background-color: #eee;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .review-reaction-button.reacted {
+    background-color: #ffefc1;
+  }
+  
+  .review-reaction-button:hover {
+    background-color: #ddd;
+  }
+  
