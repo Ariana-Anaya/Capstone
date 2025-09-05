@@ -24,7 +24,14 @@ def add_reaction_to_review(review_id):
     ).first()
     
     if existing_reaction:
-        return jsonify({"message": "User already has a reaction for this review"}), 400
+        if existing_reaction.type == reaction_type:
+            db.session.delete(existing_reaction)
+            db.session.commit()
+            return jsonify({"message": "Reaction removed"}), 200
+        else:
+            existing_reaction.type = reaction_type
+            db.session.commit()
+            return jsonify(existing_reaction.to_dict()), 200
 
     reaction = Reaction(
         user_id=current_user.id,
@@ -63,7 +70,14 @@ def add_reaction_to_mix(mix_id):
     ).first()
     
     if existing_reaction:
-        return jsonify({"message": "User already has a reaction for this mix"}), 400
+        if existing_reaction.type == reaction_type:
+            db.session.delete(existing_reaction)
+            db.session.commit()
+            return jsonify({"message": "Reaction removed"}), 200
+        else:
+            existing_reaction.type = reaction_type
+            db.session.commit()
+            return jsonify(existing_reaction.to_dict()), 200
 
     reaction = Reaction(
         user_id=current_user.id,

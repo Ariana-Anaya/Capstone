@@ -67,10 +67,7 @@ function ProfileView() {
   const reviews = Object.values(userReviews || {});
   const mixes = Object.values(userMixes || {});
 
-  const handleTileClick = (type) => {
-    if (type === "review") navigate("/reviews/manage");
-    if (type === "mix") navigate("/mixes/manage");
-  };
+  
 
   return (
     <div className="profile-page-container">

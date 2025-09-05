@@ -24,11 +24,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
-  margin-top: 1rem; /* ensure some spacing under heading */
+  margin-top: 1rem;
 }
 
 .activity-tile {
-  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 0.5rem;
   cursor: pointer;
@@ -37,8 +36,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  min-height: 180px; /* prevent collapse if image fails */
-  background-color: #f9f9f9; /* subtle background to make content visible */
+  min-height: 180px; 
 }
 
 .activity-tile:hover {
@@ -46,8 +44,8 @@
 }
 
 .activity-image {
-  width: 100%;
-  height: 120px; /* taller so image is more visible */
+  width: 120%;
+  height: 140px;
   object-fit: cover;
   border-radius: 4px;
   margin-bottom: 0.5rem;
@@ -58,13 +56,10 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: #333;
-  word-break: break-word; /* prevent long titles from overflowing */
+  word-break: break-word;
 }
 
-.activity-date {
-  font-size: 0.75rem;
-  color: #666;
-}
+
 
 .activity-type {
   font-size: 0.75rem;
