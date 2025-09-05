@@ -180,4 +180,14 @@ def get_recent_reviews():
         "Reviews": [review.to_dict_with_song_details() for review in reviews]
     })
 
+@review_routes.route('/songs/<int:song_id>')
+def get_reviews_by_song(song_id):
+    """
+    Get all reviews for a specific song by song_id
+    """
+    reviews = Review.query.filter(Review.song_id == song_id).order_by(Review.created_at.desc()).all()
 
+   
+    return jsonify({
+        "Reviews": [review.to_dict_with_song_details() for review in reviews]
+    })

@@ -6,7 +6,7 @@ def seed_reviews():
         user_id=1,
         song_id=1,
         review="Its not the tame impala Im used to but I still like it, it definitely grew on me. Minute 3:30-6 is amazing",
-        rating=7
+        rating=4
     )
     review2 = Review(
         user_id=2,
@@ -18,7 +18,7 @@ def seed_reviews():
         user_id=3,
         song_id=2,
         review="Sad Disco is so fitting because I really don't know whether to cry or shimmy my shoulders",
-        rating=9
+        rating=5
     )
 
     db.session.add(review1)

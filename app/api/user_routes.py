@@ -134,3 +134,27 @@ def get_user_mixes(user_id):
         "Mixes": [mix.to_dict_user_and_song() for mix in mixes]
     })
 
+@user_routes.route('/<int:user_id>/edit', methods=['PUT'])
+@login_required
+
+def edit_user(user_id):
+
+    if user_id != current_user.id:
+        return jsonify({"message": "Forbidden"}), 403
+
+    form = EditForm(data=request.json)
+    if 'csrf_token' in request.cookies:
+        form['csrf_token'].data = request.cookies['csrf_token']
+
+    if form.validate():
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            current_user.first_name = form.first_name.data
+            current_user.last_name = form.last_name.data
+            current_user.avatar_url = form.avatar_url.data
+            current_user.bio = form.bio.data
+
+            db.session.commit()
+            return {'user': current_user.to_dict()}
+
+    return {'errors': form.errors}, 400
