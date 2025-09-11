@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUserReviews } from "../../redux/reviews";
 import { fetchUserMixes } from "../../redux/mixes";
+import { Link } from "react-router-dom";
 import { fetchFollowers, fetchFollowing, followUser, unfollowUser } from "../../redux/follows";
 import "./ProfileView.css";
 
@@ -105,12 +106,12 @@ function ProfileView() {
   )}
 
         {isOwner && (
-          <button
-            className="btn-primary"
-            onClick={() => navigate("/profile/edit")}
-          >
-            Edit Profile
-          </button>
+          <Link
+          to={`/profile/${sessionUser.id}/edit`}
+          className="btn-primary"
+        >
+          Edit Profile
+        </Link>
         )}
       </div>
 
