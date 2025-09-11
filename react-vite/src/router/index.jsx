@@ -4,6 +4,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import ReviewManagement from '../components/ReviewManagement';
 import MixManagement from '../components/MixManagement';
 import ProfileView from '../components/ProfileView'
+import EditProfileForm from '../components/EditProfileForm';
 import ReviewForm from '../components/ReviewForm';
 import MixDetails from '../components/MixDetails';
 import MixForm from '../components/MixForm'
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "/profile/:userId",
         element: <ProfileView />,
+      },
+      {
+        path: "/profile/:userId/edit",
+        element: <EditProfileForm />,
       },
       {
         path: "login",
