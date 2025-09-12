@@ -57,23 +57,26 @@ export const thunkSignup = (user) => async (dispatch) => {
 };
 
 export const thunkUpdateUser = (userId, userData) => async (dispatch) => {
-  const response = await fetch(`/api/users/${userId}/edit`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(userData)
-  });
+  try {
+    const response = await fetch(`/api/users/${userId}/edit`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData)
+    });
 
-  if(response.ok) {
     const data = await response.json();
-    dispatch(setUser(data.user));
-    return data.user;
-  } else if (response.status < 500) {
-    const errorMessages = await response.json();
-    return errorMessages
-  } else {
-    return { server: "Something went wrong. Please try again" }
+
+    if (response.ok) {
+      dispatch(setUser({ user: data.user || data }));
+      return { user: data.user || data };
+    } else {
+      return { errors: data.errors || [data.message || "Unknown error"] };
+    }
+  } catch (err) {
+    return { errors: [err.message || "Server error"] };
   }
 };
+
 
 
 export const thunkLogout = () => async (dispatch) => {

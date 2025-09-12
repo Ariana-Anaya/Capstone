@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUserReviews } from "../../redux/reviews";
 import { fetchUserMixes } from "../../redux/mixes";
-import { Link } from "react-router-dom";
 import { fetchFollowers, fetchFollowing, followUser, unfollowUser } from "../../redux/follows";
+import EditProfileForm from "../EditProfileForm/EditProfileForm";
 import "./ProfileView.css";
 
 function ProfileView() {
@@ -18,6 +18,10 @@ function ProfileView() {
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const handleTileClick = (reviewId) => {navigate(`/songs/${reviewId}/reviews`);
+  };
+
 
 
   const userReviews = useSelector((state) => state.reviews.userReviews);
@@ -106,14 +110,21 @@ function ProfileView() {
   )}
 
         {isOwner && (
-          <Link
-          to={`/profile/${sessionUser.id}/edit`}
-          className="btn-primary"
-        >
-          Edit Profile
-        </Link>
-        )}
-      </div>
+           <button
+           className="btn-primary"
+           onClick={() => setShowEditModal(true)}
+         >
+           Edit Profile
+         </button>
+       )}
+     </div>
+ 
+     {/* MODAL */}
+     {showEditModal && (
+       <EditProfileForm
+         onClose={() => setShowEditModal(false)}
+       />
+     )}
 
       <div className="recent-activity">
         <h3>Recent Reviews</h3>
@@ -125,7 +136,7 @@ function ProfileView() {
               <div
                 key={`review-${review.id}`}
                 className="activity-tile"
-                onClick={() => handleTileClick("review")}
+                onClick={() => handleTileClick(review.songId.id)}
               >
                 {review.songId?.imageUrl && (
                   <img

@@ -14,6 +14,7 @@ function ProfileButton() {
   const user = useSelector((store) => store.session.user);
   const ulRef = useRef();
 
+
   const toggleMenu = (e) => {
     e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
     setShowMenu(!showMenu);
@@ -78,7 +79,15 @@ function ProfileButton() {
               </div>
               
               <div className="dropdown-divider"></div>
-              
+              <button 
+              className="dropdown-item"
+               onClick={() => {
+               navigate(`/profile/${user.user.id}`);
+               closeMenu();
+                 }}
+                >
+                 👤  My Profile
+                </button>
               <button 
                 className="dropdown-item"
                 onClick={() => {
@@ -100,6 +109,7 @@ function ProfileButton() {
               >
                 🎧  My Reviews
               </button>
+              
               
               <div className="dropdown-divider"></div>
               

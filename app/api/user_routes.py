@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
+from app.forms import EditForm
 from app.models import User, Mix, Reaction, Follow, Review, db
 
 user_routes = Blueprint('users', __name__)
@@ -138,7 +139,6 @@ def get_user_mixes(user_id):
 @login_required
 
 def edit_user(user_id):
-
     if user_id != current_user.id:
         return jsonify({"message": "Forbidden"}), 403
 
@@ -147,6 +147,7 @@ def edit_user(user_id):
         form['csrf_token'].data = request.cookies['csrf_token']
 
     if form.validate():
+        try:
             current_user.username = form.username.data
             current_user.email = form.email.data
             current_user.first_name = form.first_name.data
@@ -155,6 +156,11 @@ def edit_user(user_id):
             current_user.bio = form.bio.data
 
             db.session.commit()
-            return {'user': current_user.to_dict()}
+            db.session.refresh(current_user)  # make sure we have the latest data
+            return jsonify(user=current_user.to_dict())
+        except Exception as e:
+            db.session.rollback()
+            print("COMMIT ERROR:", e)
+            return jsonify(errors={"commit": str(e)}), 500
 
-    return {'errors': form.errors}, 400
+    return jsonify(errors=form.errors), 400

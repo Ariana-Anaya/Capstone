@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkUpdateUser } from "../../redux/session"; 
+import "./EditProfileForm.css";
 
-function EditProfileModal({ onClose }) {
+function EditProfileForm({ onClose }) {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.session.user);
+  const currentUser = useSelector((state) => state.session.user.user);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -29,36 +30,37 @@ function EditProfileModal({ onClose }) {
     e.preventDefault();
     setErrors([]);
 
+    if (typeof onClose !== "function") {
+      console.error("onClose is not a function!");
+      return;
+    }
+
     try {
-      const updatedUser = await dispatch(
+      const result = await dispatch(
         thunkUpdateUser(currentUser.id, {
           username,
           email,
-          firstName,
-          lastName,
-          avatarUrl,
+          first_name: firstName,
+          last_name: lastName,
+          avatar_url: avatarUrl,
           bio,
         })
       );
-      onClose(); 
+
+      if (result.errors) {
+        setErrors(result.errors);
+      } else {
+        onClose(); // Close modal only if no errors
+      }
     } catch (err) {
-      if (Array.isArray(err)) setErrors(err);
-      else if (err.errors) {
-        const allErrors = Object.values(err.errors).flat();
-        setErrors(allErrors);
-      } else if (err.message) setErrors([err.message]);
+      setErrors([err.message || "Something went wrong"]);
     }
   };
 
   return (
     <div className="editprofile-overlay" onClick={onClose}>
-      <div
-        className="editprofile-container"
-        onClick={(e) => e.stopPropagation()} 
-      >
-        <button className="close-btn" onClick={onClose}>
-          &times;
-        </button>
+      <div className="editprofile-container" onClick={(e) => e.stopPropagation()}>
+        <button className="close-btn" onClick={onClose}>&times;</button>
         <h1>Edit Profile</h1>
 
         {errors.length > 0 && (
@@ -72,63 +74,34 @@ function EditProfileModal({ onClose }) {
         <form className="editprofile-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Username</label>
-            <input
-              type="text"
-              value={username}
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
           </div>
 
           <div className="form-group">
             <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label>First Name</label>
-              <input
-                type="text"
-                value={firstName}
-                placeholder="First Name"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
+              <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
             </div>
 
             <div className="form-group">
               <label>Last Name</label>
-              <input
-                type="text"
-                value={lastName}
-                placeholder="Last Name"
-                onChange={(e) => setLastName(e.target.value)}
-              />
+              <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
             </div>
           </div>
 
           <div className="form-group">
             <label>Avatar URL</label>
-            <input
-              type="text"
-              value={avatarUrl}
-              placeholder="Avatar URL"
-              onChange={(e) => setAvatarUrl(e.target.value)}
-            />
+            <input type="text" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} />
           </div>
 
           <div className="form-group">
             <label>Bio</label>
-            <textarea
-              value={bio}
-              placeholder="Bio"
-              onChange={(e) => setBio(e.target.value)}
-            />
+            <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
           </div>
 
           <button className="save-button" type="submit">Save Changes</button>
@@ -145,4 +118,4 @@ function EditProfileModal({ onClose }) {
   );
 }
 
-export default EditProfileModal;
+export default EditProfileForm;
