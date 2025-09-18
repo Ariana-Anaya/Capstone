@@ -119,7 +119,6 @@ function ProfileView() {
        )}
      </div>
  
-     {/* MODAL */}
      {showEditModal && (
        <EditProfileForm
          onClose={() => setShowEditModal(false)}

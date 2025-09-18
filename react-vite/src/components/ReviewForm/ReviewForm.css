@@ -104,18 +104,18 @@
 
 .star {
   font-size: 28px;
-  color: var(--border-subtle);
+  color: var(--border-subtle)!important;
   cursor: pointer;
   transition: color 0.2s;
   user-select: none;
 }
 
 .star.active {
-  color: var(--neon-pink);
+  color: var(--neon-pink)!important; /* when hovering */
 }
 
-.star:hover {
-  color: var(--neon-pink);
+.star.selected {
+  color: var(--neon-pink)!important; /* when clicked */
 }
 
 .character-count {

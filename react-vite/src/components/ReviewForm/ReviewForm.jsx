@@ -199,15 +199,15 @@ function ReviewForm({ onClose, review = null, onSubmit = null }) {
           <div className="form-group">
             <label>Rating</label>
             <div className="star-rating">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <span
-                  key={value}
-                  className={`star ${value <= (hoveredStar || rating) ? 'active' : ''}`}
-                  onClick={() => handleStarClick(value)}
-                  onMouseEnter={() => handleStarHover(value)}
-                  onMouseLeave={handleStarLeave}
-                >
-                  ★
+  {[1, 2, 3, 4, 5].map((value) => (
+    <span
+      key={value}
+      className={`star ${hoveredStar >= value ? 'active' : rating >= value ? 'selected' : ''}`}
+      onClick={() => handleStarClick(value)}
+      onMouseEnter={() => handleStarHover(value)}
+      onMouseLeave={handleStarLeave}
+    >
+      ★
                 </span>
               ))}
             </div>
