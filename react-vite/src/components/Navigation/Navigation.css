@@ -136,21 +136,22 @@
 }
 
 .user-avatar {
-  height: 75px;
-  width: 75px;
+  height: 50px;
+  width: 50px;
   position: relative;
   background: none;
   border: none;
   color: #E0E0E0;
   cursor: pointer;
-  padding: 8px;
+  padding: 1px;
   border-radius: 50%;
   transition: all 0.2s ease;
 }
 
 .profile-button:hover {
-  background: rgba(255, 3, 3, 0.156);
-  transform: scale(1.1);
+  background: none;
+  box-shadow: 0 0 3px 1px var(--neon-pink) inset;
+  transform: scale(1.05);
 }
 
 .profile-dropdown {
