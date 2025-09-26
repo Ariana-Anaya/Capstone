@@ -1,0 +1,201 @@
+.landing-page {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-white);
+  }
+  
+  .hero-section {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--purple-one) 0%, var(--purple-two) 100%);
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero-section p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-buttons button {
+    margin: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .features-section {
+    margin-bottom: 3rem;
+  }
+  
+  .features-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .features-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .feature-card {
+    background: var(--purple-two);
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 15px var(--charcoal);
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--charcoal);
+  }
+  
+  .feature-card span {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .community-preview {
+    margin-bottom: 3rem;
+  }
+  
+  .community-preview h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mix-preview-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  
+  .mix-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  
+  .mix-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(102, 126, 234, 0.1);
+  }
+  .mix-card h3 {
+    color: #333;
+  }
+   
+  .mix-placeholder {
+    font-size: 3rem;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border-subtle);
+    border-radius: 0.5rem;
+  }
+  
+  .cta-section {
+    margin: 4rem 0;
+  }
+  
+  .cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-pink) 100%);
+    color: var(--text-hover-white);
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--light-blue);
+  }
+  
+  .btn-secondary {
+    background: var(--purple-two);
+    color: var(--text-white);
+    border: none;
+  }
+  
+  .reviews-preview {
+    margin-bottom: 3rem;
+  }
+  
+  .reviews-preview h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .reviews-preview-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  
+  .review-card {
+    background: var(--purple-two);
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 180px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 15px var(--charcoal);
+    transition: all 0.3s ease;
+  }
+  
+  .review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--charcoal);
+  }
+  
+  .review-placeholder {
+    font-size: 3rem;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border-subtle);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .review-info h4 {
+    font-size: 1rem;
+    margin: 0.5rem 0 0.25rem 0;
+    color: #333;
+  }
+  
+  .review-info p {
+    font-size: 0.85rem;
+    margin: 0.25rem 0;
+  }
+  
+  .review-username {
+    font-style: italic;
+    color: var(--text-hover-white);
+  }

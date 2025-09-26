@@ -16,7 +16,7 @@ function Navigation() {
 
         <ul className="nav-links">
           <li>
-            <NavLink to="/" className="nav-link">Mixes</NavLink>
+            <NavLink to="/mixes/browse" className="nav-link">Mixes</NavLink>
           </li>
         </ul>
         <ul className="nav-links">

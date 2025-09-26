@@ -8,6 +8,7 @@ import EditProfileForm from '../components/EditProfileForm';
 import ReviewForm from '../components/ReviewForm';
 import MixDetails from '../components/MixDetails';
 import MixForm from '../components/MixForm'
+import LandingPage from '../components/HomePage';
 import MixList from '../components/MixList'
 import MixSongs from '../components/MixSongs'
 import ReviewList from '../components/ReviewList'
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <LandingPage />,
+      },
+      {
+        path: "/mixes/browse",
         element: <MixList />,
       },
       {
